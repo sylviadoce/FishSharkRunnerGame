@@ -6,15 +6,15 @@
 #
 class Fish:
 
-    def init():
+    def __init__(self, fish_id, init_pos):
 
-    def getNextPosition(sharkPos: list, otherFishAPos: list, otherFishBPos:
+    def getNextPosition(self, shark_pos: list, otherfishA_pos: list, otherfishB_pos:
                     list) -> list:
         return list
 
-    def getDirections() -> range(0,3):
+    def getDirection(self) -> range(0,3):
         ds
 
-    def getFleeMode() -> bool:
+    def getFleeMode(self) -> bool:
         # Checking whether 
     
