@@ -1,4 +1,3 @@
-#
 # Sylvia Chin
 #
 # Fish class takes care of fish movement, coordinates, "flee" mode,
