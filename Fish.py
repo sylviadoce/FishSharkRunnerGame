@@ -12,9 +12,10 @@ class Fish:
                     list) -> list:
         return list
 
-    def getDirection(self) -> range(0,3):
-        ds
+    def getDirection(self) -> int:
+        # directions are range(0,3) - n is 0, e is 1, s is 2, w is 3
 
     def getFleeMode(self) -> bool:
-        # Checking whether 
+        # Checking whether fish is 3 or less spaces away from shark
+        # Next fish move is in opposite direction
     
