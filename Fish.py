@@ -4,9 +4,13 @@
 # Fish class takes care of fish movement, coordinates, "flee" mode,
     # and death
 #
+from random import randrange
+
 class Fish:
 
-    def __init__(self, fish_id, init_pos):
+    def __init__(self, fish_id, init_pos: list):
+        self.position = init_pos
+        self.direction = randrange(0,3)
 
     def getNextPosition(self, shark_pos: list, otherfishA_pos: list, otherfishB_pos:
                     list) -> list:
