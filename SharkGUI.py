@@ -7,7 +7,6 @@ from Button import Button
 from PIL import ImageTk
 import PIL.Image
 
-from time import sleep
 
 class SharkGUI:
 
@@ -41,11 +40,15 @@ class SharkGUI:
         self.message.draw(self.win).setTextColor("#B1E5FC")
         self.message.setSize(24)
 
-        self.coordinates = [[-100, -100] * 4]
+        self.rotations = [0] * 4
         self.images = [PIL.Image.open("gui/shark_low_res.png"),
                        PIL.Image.open("gui/orange_fish_low_res.png"),
                        PIL.Image.open("gui/yellow_fish_low_res.png"),
                        PIL.Image.open("gui/purple_fish_low_res.png")]
+        self.fleeImages = [PIL.Image.open("gui/shark_low_res.png"),
+                           PIL.Image.open("gui/orange_fish_flee.png"),
+                           PIL.Image.open("gui/yellow_fish_flee.png"),
+                           PIL.Image.open("gui/purple_fish_flee.png")]
         self.sprites = [Image(Point(-100, -100), "gui/shark_low_res.png")
                         .draw(self.win),
                         Image(Point(-100, -100),
@@ -71,13 +74,19 @@ class SharkGUI:
         self.message.setText(string)
 
     def getStartPressed(self, point) -> bool:
-        return self.start_button.clicked(point)
+        if self.start_button.clicked(point):
+            self.start_button.deactivate()
+            self.move_button.activate()
+            return True
+        else:
+            return False
 
     def getMovePressed(self, point) -> bool:
         return self.move_button.clicked(point)
 
-    def getQuitPressed(self, point) -> bool:
-        return self.quit_button.clicked(point)
+    def getQuitPressed(self, point):
+        if self.quit_button.clicked(point):
+            quit("Quit Button Pressed")
 
     def setMoveButtonLabel(self, label):
         self.move_button.setLabel(label)
@@ -98,9 +107,9 @@ class SharkGUI:
         current_position = [self.sprites[index].getAnchor().getX(),
                             self.sprites[index].getAnchor().getY()]
         delta_position = [(target_position[0] - current_position[0])
-                    // (total_time * self.animation_fps),
-                    (target_position[1] - current_position[1])
-                    // (total_time * self.animation_fps)]
+                          // (total_time * self.animation_fps),
+                          (target_position[1] - current_position[1])
+                          // (total_time * self.animation_fps)]
         print("target", target_position)
         self._continueSpriteMove(
             index, target_position, delta_position, 0,
@@ -126,31 +135,48 @@ class SharkGUI:
         self.sprites[index].draw(self.win)
 
     def spriteRotateOverTime(self, index: int, total_time: float,
-                             target_degrees: int,
-                             current_degrees: int):
+                             target_degrees: int):
         self._continueSpriteRotate(
-            index, (target_degrees - current_degrees)
+            index, (target_degrees - self.rotations[index])
             // int(total_time * self.animation_fps), target_degrees,
-            (1000 // self.animation_fps), current_degrees)
+            (1000 // self.animation_fps), self.rotations[index])
 
     def _continueSpriteRotate(self, index: int, delta_degrees: int,
-                              target_degrees: int, deltaMs: int,
+                              target_degrees: int, delta_ms: int,
                               current_degrees: int):
         if current_degrees < target_degrees:
             self.spriteRotate(index, current_degrees + delta_degrees)
-            self.win.after(deltaMs, self._continueSpriteRotate, index,
+            self.win.after(delta_ms, self._continueSpriteRotate, index,
                            delta_degrees, target_degrees,
-                           deltaMs, current_degrees + delta_degrees)
+                           delta_ms, current_degrees + delta_degrees)
         else:
             self.spriteRotate(index, target_degrees)
 
-    def setCoordinates(self, coordinates):
+    def pointToList(self, point: Point):
+        return [point.getX(), point.getY()]
+
+    def setCoordinates(self, coordinates: list,
+                       rotation_seconds: float, move_seconds: float):
+        rotate = 0
         for i in range(len(coordinates)):
-            if self.coordinates[i] != coordinates[i]:
-                self.coordinates[i] = coordinates[i]
-                self.spriteMoveTo(i, self.gridToCanvas(
-                    coordinates[i][0], coordinates[i][1]))
+            if (coordinates[i][:2] !=
+                    self.pointToList(self.sprites[i].getAnchor())):
+                if coordinates[i][2] != self.rotations[i]:
+                    rotate += 1
+                    self.spriteRotateOverTime(i, rotation_seconds,
+                                              coordinates[i][2])
+                    self.win.after(
+                        rotation_seconds * 1000, self.spriteMoveOverTime,
+                        i, move_seconds, self.gridToCanvas(
+                            coordinates[i][0], coordinates[i][1]))
+                else:
+                    self.spriteMoveOverTime(
+                        i, move_seconds, self.gridToCanvas(
+                            coordinates[i][0], coordinates[i][1]))
         self.win.flush()
+        if rotate:
+            self.win.mainloop(rotation_seconds)
+        self.win.mainloop(move_seconds)
 
 
 if __name__ == "__main__":
@@ -161,9 +187,9 @@ if __name__ == "__main__":
     testGUI.start_button.deactivate()
     testGUI.move_button.activate()
     testGUI.win.getMouse()
-    testGUI.setCoordinates([[9, 9]])
+    testGUI.setCoordinates([[9, 9, 90]], 1, 1)
     testGUI.win.getMouse()
-    testGUI.spriteRotateOverTime(0, 1, 270, 0)
+    testGUI.spriteRotateOverTime(0, 1, 270)
     testGUI.win.after(1000, testGUI.spriteMoveOverTime, 0, 1,
                       testGUI.gridToCanvas(4, 4))
     testGUI.win.getMouse()
