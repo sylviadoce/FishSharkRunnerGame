@@ -1,15 +1,14 @@
 # Shark Game GUI Handler (Benjamin Antupit)
 
-from graphics import *
+from graphics import GraphWin, tk, Image, Point, Entry, Text
 
 from Button import Button
 
-from PIL import ImageTk
 import PIL.Image
+import PIL.ImageTk
 
 
 class SharkGUI:
-
     def __init__(self):
         self.animation_fps = 10
         self.win = GraphWin("Water World", 1200, 800, False)
@@ -40,7 +39,7 @@ class SharkGUI:
         self.message.draw(self.win).setTextColor("#B1E5FC")
         self.message.setSize(24)
 
-        self.rotations = [0] * 4
+        self.rotations = [-90, 0, 0, 0]
         self.images = [PIL.Image.open("gui/shark_low_res.png"),
                        PIL.Image.open("gui/orange_fish_low_res.png"),
                        PIL.Image.open("gui/yellow_fish_low_res.png"),
@@ -128,27 +127,39 @@ class SharkGUI:
         else:
             self.spriteMoveTo(index, target_position)
 
-    def spriteRotate(self, index: int, abs_rotation_degrees: float):
-        self.sprites[index].img = ImageTk.PhotoImage(
-            self.images[index].rotate(abs_rotation_degrees, expand=True))
+    def spriteRotate(self, index: int, abs_rotation_degrees: int):
+        abs_rotation_degrees %= 360
+        self.rotations[index] = abs_rotation_degrees
+        direction = 1
+        if 180 <= abs_rotation_degrees < 360:
+            direction = -1
+        self.sprites[index].img = PIL.ImageTk.PhotoImage(
+            self.images[index].rotate(
+                direction * abs_rotation_degrees, expand=True))
         self.sprites[index].undraw()
         self.sprites[index].draw(self.win)
 
     def spriteRotateOverTime(self, index: int, total_time: float,
                              target_degrees: int):
+        target_degrees %= 360
+        delta_sign = 1
+        if target_degrees - self.rotations[index] <= 180:
+            delta_sign = -1
+        # TODO: account for alt. rotation direction in delta_degrees
+        #  (makes too small jumps now)
         self._continueSpriteRotate(
-            index, (target_degrees - self.rotations[index])
-            // int(total_time * self.animation_fps), target_degrees,
-            (1000 // self.animation_fps), self.rotations[index])
+            index, delta_sign * (target_degrees - self.rotations[index])
+            // int(total_time * self.animation_fps),
+            target_degrees, 1000 // self.animation_fps)
 
     def _continueSpriteRotate(self, index: int, delta_degrees: int,
-                              target_degrees: int, delta_ms: int,
-                              current_degrees: int):
-        if current_degrees < target_degrees:
-            self.spriteRotate(index, current_degrees + delta_degrees)
+                              target_degrees: int, delta_ms: int):
+        if not((target_degrees - abs(delta_degrees)) <
+               self.rotations[index] <
+               (target_degrees + abs(delta_degrees))):
+            self.spriteRotate(index, self.rotations[index] + delta_degrees)
             self.win.after(delta_ms, self._continueSpriteRotate, index,
-                           delta_degrees, target_degrees,
-                           delta_ms, current_degrees + delta_degrees)
+                           delta_degrees, target_degrees, delta_ms)
         else:
             self.spriteRotate(index, target_degrees)
 
@@ -156,7 +167,7 @@ class SharkGUI:
         return [point.getX(), point.getY()]
 
     def setCoordinates(self, coordinates: list,
-                       rotation_seconds: float, move_seconds: float):
+                       rotation_seconds: float, move_seconds: int):
         rotate = 0
         for i in range(len(coordinates)):
             if (coordinates[i][:2] !=
@@ -182,15 +193,15 @@ class SharkGUI:
 if __name__ == "__main__":
     testGUI = SharkGUI()
     testGUI.win.getMouse()
-    testGUI.disableEntry()
+    testGUI.setCoordinates([[0, 0, 0]], 1, 1)
     testGUI.win.getMouse()
-    testGUI.start_button.deactivate()
-    testGUI.move_button.activate()
+    testGUI.setCoordinates([[0, 9, 180]], 1, 1)
     testGUI.win.getMouse()
     testGUI.setCoordinates([[9, 9, 90]], 1, 1)
     testGUI.win.getMouse()
-    testGUI.spriteRotateOverTime(0, 1, 270)
-    testGUI.win.after(1000, testGUI.spriteMoveOverTime, 0, 1,
-                      testGUI.gridToCanvas(4, 4))
+    testGUI.setCoordinates([[0, 1, -45]], 1, 1)
     testGUI.win.getMouse()
+    testGUI.disableEntry()
+    testGUI.start_button.deactivate()
+    testGUI.move_button.activate()
     print(testGUI.getCoordinates())
