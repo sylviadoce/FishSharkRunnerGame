@@ -1,11 +1,10 @@
 # Shark Game GUI Handler (Benjamin Antupit)
 
-from graphics import GraphWin, tk, Image, Point, Entry, Text
-
 from Button import Button
-
+from graphics import GraphWin, tk, Image, Point, Entry, Text
 import PIL.Image
 import PIL.ImageTk
+import math
 
 
 class SharkGUI:
@@ -93,8 +92,11 @@ class SharkGUI:
     def gridToCanvas(self, x, y):
         return [x * 72 + 475, y * 72 + 75]
 
-    def canvasToGrid(self, x, y):
-        return [(x - 440) // 72, (y - 40) // 72]
+    def canvasToGrid_x(self, x):
+        return (x - 440) // 72
+
+    def canvasToGrid_y(self, y):
+        return (y - 40) // 72
 
     def spriteMoveTo(self, index: int, canvas_coordinates: list):
         self.sprites[index].move(
@@ -109,7 +111,7 @@ class SharkGUI:
                           // (total_time * self.animation_fps),
                           (target_position[1] - current_position[1])
                           // (total_time * self.animation_fps)]
-        print("target", target_position)
+        print("target move", target_position)
         self._continueSpriteMove(
             index, target_position, delta_position, 0,
             int(total_time * self.animation_fps) - 1,
@@ -123,32 +125,35 @@ class SharkGUI:
             self.win.after(delta_ms, self._continueSpriteMove, index,
                            target_position, delta_position, count + 1,
                            total_steps, delta_ms)
-            print(self.sprites[index].getAnchor())
         else:
             self.spriteMoveTo(index, target_position)
 
     def spriteRotate(self, index: int, abs_rotation_degrees: int):
         abs_rotation_degrees %= 360
         self.rotations[index] = abs_rotation_degrees
-        direction = 1
         if 180 <= abs_rotation_degrees < 360:
-            direction = -1
-        self.sprites[index].img = PIL.ImageTk.PhotoImage(
-            self.images[index].rotate(
-                direction * abs_rotation_degrees, expand=True))
+            self.sprites[index].img = PIL.ImageTk.PhotoImage(
+                self.images[index].rotate(
+                    abs_rotation_degrees, expand=True))
+        else:
+            self.sprites[index].img = PIL.ImageTk.PhotoImage(
+                self.images[index].rotate(
+                    -abs_rotation_degrees, expand=True).
+                transpose(PIL.Image.FLIP_LEFT_RIGHT))
         self.sprites[index].undraw()
         self.sprites[index].draw(self.win)
 
     def spriteRotateOverTime(self, index: int, total_time: float,
                              target_degrees: int):
         target_degrees %= 360
-        delta_sign = 1
-        if target_degrees - self.rotations[index] <= 180:
-            delta_sign = -1
+        total_delta_degrees = target_degrees - self.rotations[index]
+        if target_degrees - self.rotations[index] >= 180:
+            total_delta_degrees = self.rotations[index] - target_degrees
         # TODO: account for alt. rotation direction in delta_degrees
         #  (makes too small jumps now)
+        print("target rotate", target_degrees, "delta", total_delta_degrees)
         self._continueSpriteRotate(
-            index, delta_sign * (target_degrees - self.rotations[index])
+            index, total_delta_degrees
             // int(total_time * self.animation_fps),
             target_degrees, 1000 // self.animation_fps)
 
@@ -167,11 +172,19 @@ class SharkGUI:
         return [point.getX(), point.getY()]
 
     def setCoordinates(self, coordinates: list,
-                       rotation_seconds: float, move_seconds: int):
+                       rotation_seconds: float = 1, move_seconds: int = 1):
         rotate = 0
         for i in range(len(coordinates)):
             if (coordinates[i][:2] !=
                     self.pointToList(self.sprites[i].getAnchor())):
+                if len(coordinates[i]) < 3:
+                    coordinates[i].append(90-int(math.degrees(math.atan2(
+                        coordinates[i][1] -
+                        self.canvasToGrid_y(
+                            self.sprites[i].getAnchor().getY()),
+                        coordinates[i][0] -
+                        self.canvasToGrid_x(
+                            self.sprites[i].getAnchor().getX())))))
                 if coordinates[i][2] != self.rotations[i]:
                     rotate += 1
                     self.spriteRotateOverTime(i, rotation_seconds,
@@ -193,13 +206,25 @@ class SharkGUI:
 if __name__ == "__main__":
     testGUI = SharkGUI()
     testGUI.win.getMouse()
-    testGUI.setCoordinates([[0, 0, 0]], 1, 1)
+    testGUI.setCoordinates([[0, 0]])
     testGUI.win.getMouse()
-    testGUI.setCoordinates([[0, 9, 180]], 1, 1)
+    testGUI.setCoordinates([[9, 0]])
     testGUI.win.getMouse()
-    testGUI.setCoordinates([[9, 9, 90]], 1, 1)
+    testGUI.setCoordinates([[9, 9]])
     testGUI.win.getMouse()
-    testGUI.setCoordinates([[0, 1, -45]], 1, 1)
+    testGUI.setCoordinates([[0, 9]])
+    testGUI.win.getMouse()
+
+    testGUI.setCoordinates([[0, 0, 0]])
+    testGUI.win.getMouse()
+    testGUI.setCoordinates([[0, 0, 359]], 5, 1)
+    testGUI.win.getMouse()
+    testGUI.setCoordinates([[0, 9]])
+    testGUI.win.getMouse()
+    testGUI.setCoordinates([[9, 9]])
+    testGUI.win.getMouse()
+    testGUI.setCoordinates([[0, 1]])
+
     testGUI.win.getMouse()
     testGUI.disableEntry()
     testGUI.start_button.deactivate()
