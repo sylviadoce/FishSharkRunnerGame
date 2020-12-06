@@ -3,7 +3,7 @@
 # Fish class takes care of fish movement, coordinates, "flee" mode,
     # and death
 #
-from random import randrange
+import random
 import math
 
 class Fish:
@@ -20,14 +20,13 @@ class Fish:
         """Gets the fishes' next positions based on each others' locations,
             considering flee mode"""
 
-        # Fish moves one spot randomly
-            # HAS to move
-            # Though doing it this way makes it more likely fish will move
-            # along the x-coord than y-coord (only 1/3 chance it moves
-            # along the y-coord)
-        random_xmove = randrange(-2,2)
-        random_ymove = randrange(-2,2)
-        randomization = randrange(0,2)
+        # Save original position
+        og_pos = self.position
+
+        # Fish moves one spot randomly - either x-coord or y-coord
+        random_xmove = random.randrange(-2,2)
+        random_ymove = random.randrange(-2,2)
+        randomization = random.randrange(0,2)
         if randomization == 0:
             self.position[0] += random_xmove
             if random_xmove == 0:
@@ -69,8 +68,6 @@ class Fish:
             else:
                 self.position[2] == 90
                 self.position[0] == 1
-
-        # Make sure no two fish move to the same spot!
         
         # Next fish move is in opposite direction - closest NESW if diagonal
         if self.getFleeMode():
@@ -80,40 +77,61 @@ class Fish:
             # Checks if angle is 0, 90, 180, -90, or -180 (straight)
             if (shark_direction == math.pi or shark_direction == -(math.pi)
                 or shark_direction == (math.pi)/2 or shark_direction ==
-                -(math.pi)/2 or shark_direction == 0:
+                -(math.pi)/2 or shark_direction == 0):
                 # Set fish's new direction to opposite (-180)
                 self.position[2] = (shark_direction) - (math.pi)
                 
             # Checks if angle is 45, -45, 135, -135 (diagonal)
-                # Fish has to choose randomly btwn the 2 furthest directions
+                # Fish has to choose randomly btwn the 2 farthest directions
             elif (shark_direction == (math.pi)/4 or shark_direction ==
                   -(math.pi)/4 or shark_direction == (3*math.pi)/4 or
-                  shark_direction == -(3*math.pi)/4:
-                shark_direction = #not finishing this?
-                self.position[2] = randrange #not finishing this?
+                  shark_direction == -(3*math.pi)/4):
+                shark_direction = degrees(shark_direction)/90
+                random_flee == random.randrange(0,2)
+                if shark_direction == 0.5:
+                    if random_flee == 0: self.position[2] = 0
+                    else: self.position[2] = 90
+                elif shark_direction = 1.5:
+                    if random_flee == 0: self.position[2] = 90
+                    else: self.position[2] = 180
+                elif shark_direction == -0.5:
+                    if random_flee == 0: self.position[2] = 0
+                    else: self.position[2] = 270
+                else:
+                    if random_flee == 0: self.position[2] = 270
+                    else: self.position[2] = 180
                   
             # Angle is arbitrary - anything else
             else:
                 # Divide by 90, round to nearest int, multiply by 90
                 exact_shark_direction = round(math.degrees(shark_direction)//90)
                 shark_direction = (exact_shark_direction)*90
-                # Closest is directly east from fish
+                # Closest is directly east from fish, fish goes west
                 if shark_direction == 0:
-                    # Fish goes west
                     self.position[2] = 180
-                # Closest is directly north from fish
+                # Closest is directly north from fish, fish goes south
                 elif shark_direction == 1:
-                    # Fish goes south
                     self.position[2] = 270
-                # Closest is directly west from fish
+                # Closest is directly west from fish, fish goes east
                 elif shark_direction == 2 or shark_direction == -2:
-                    # Fish goes east
                     self.position[2] = 0
-                # Closest is directly south from fish
+                # Closest is directly south from fish, fish goes north
                 elif shark_direction = -1:
-                    # Fish goes north
                     self.position[2] = 90
-                                   
+
+        # No two fish can move to the same spot (same x,y-coords)
+        if ((self.position[0] == otherfishA_pos[0] or self.position[0] ==
+            otherfishB_pos[0]) and (self.position[1] == otherfishA_pos[1] or
+                                    self.position[1] == otherfishB_pos[1])):
+            if self.getFleeMode():
+                # Figure out how to cycle back
+                if random_flee == 0:
+                    random_flee = 1
+                else:
+                    random_flee = 0  
+            else:
+                # Don't move self, don't change self direction
+                self.position = og_pos
             
         return list
 
