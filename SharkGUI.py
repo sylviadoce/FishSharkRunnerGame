@@ -28,13 +28,16 @@ class SharkGUI:
                                disabledbackground="#5098B4",
                                disabledforeground="#B1E5FC")
 
-        self.start_button = Button(self.win, Point(215, 430),
-                                   316, 48, "Start")
-        self.move_button = Button(self.win, Point(212, 664),
+        self.start_button = Button(Point(215, 430), 316, 48, "Start")
+        self.move_button = Button(Point(212, 664),
                                   316, 48, "Move").deactivate()
-        self.quit_button = Button(self.win, Point(212, 736),
-                                  320, 48, "Quit")
+        self.quit_button = Button(Point(212, 736), 320, 48, "Quit")
         self.quit_button.setFill("").setOutline("")
+        for e in (self.start_button.getElements() +
+                  self.move_button.getElements() +
+                  self.quit_button.getElements()):
+            e.draw(self.win)
+
         self.message = Text(Point(212, 568), "Enter Fish Coordinates \n"
                                              "and select Start to begin")
         self.message.draw(self.win).setTextColor("#B1E5FC")
