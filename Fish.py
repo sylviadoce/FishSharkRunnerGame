@@ -27,73 +27,21 @@ class Fish:
             return [-10,-10]
         if self.getFleeMode():
             return self.getFleeModeNextPosition()
-            # include if facing wall and if in same fish
         if self.facingWall():
             self.position[2] += 180
             self.position[2] %= 360
-        if self.sameNextPosition():
+        if self.sameNextPosition(self.getXY()):
             return self.position
 
+        return self.getXY()
+
+    def getXY(self) -> list:
+        "Gets next move along x or y axis"
+        
         self.position[0] = math.cos(self.position[2])
         self.position[1] = math.sin(self.position[2])
-        return self.position            
-            
-        # Save original position
-        og_pos = self.position
-
-        # Fish continues in its random direction
-        dgjklhs
         
-##        random_xmove = random.randrange(-1,2)
-##        random_ymove = random.randrange(-1,2)
-##        randomization = random.randrange(0,2)
-##        if randomization == 0:
-##            self.position[0] += random_xmove
-##            if random_xmove == 0:
-##                self.position[1] += random.choice([-1,1])
-##        elif randomization == 1:
-##            self.position[1] += random_ymove
-##            if random_ymove == 0:
-##                self.position[0] += random.choice([-1,1])
-
-        # Check if fish is next to a wall, make sure it doesn't leave grid
-            # Checking left wall, right wall, top wall, bottom wall
-        if self.position[0] == 0:
-            # If flee mode and planning to go thru wall, enter on other side
-            if (self.getFleeMode() and self.position[2] == 180 and
-                random_xmove == -1):
-                self.position[0] = 10
-            # Otherwise turn around and move one
-            else:
-                self.position[2] = 0
-                self.position[0] = 1
-        elif self.position[0] == 10:
-            if (self.getFleeMode() and self.position[2] == 0 and
-                random_xmove == 1):
-                self.position[0] = 0
-            else:
-                self.position[2] = 180
-                self.position[0] = 9
-        elif self.position[1] == 10:
-            if (self.getFleeMode() and self.position[2] == 90 and
-                random_ymove == 1):
-                self.position[1] = 0
-            else:
-                self.position[2] = 270
-                self.position[0] = 9
-        elif self.position[1] == 0:
-            if (self.getFleeMode() and self.position[2] == 270 and
-                random_ymove == -1):
-                self.position[1] = 10
-            else:
-                self.position[2] = 90
-                self.position[0] = 1
-        
-        # Next fish move is in opposite direction - closest NESW if diagonal
-        if self.getFleeMode():
-            
-            
-        return list
+        return self.position
 
     def getDirection(self) -> int:
         "Gets the direction z from the list x, y, z of self"
@@ -108,11 +56,25 @@ class Fish:
                 (self.position[1] == 0 and self.position[2] == 90) or
                 (self.position[1] == 9 and self.position[2] == 270))
 
-    def sameNextPosition(self) -> bool:
+    def sameNextPosition(self, position: list) -> bool:
         "Returns True if two fish are moving to the same position"
-        return (self.position[:2] == otherfishA_pos[:2] or self.position[:2] ==
+        
+        return (position[:2] == otherfishA_pos[:2] or position[:2] ==
             otherfishB_pos[:2])
-    
+
+    def getThroughWallPosition(self) -> list:
+        """Detecting in flee mode that fish goes through the wall,
+            returns new position""" 
+
+        if self.position[0] == -1:
+            return [9, self.position[1]]
+        elif self.position[0] == 10:
+            return [0, self.position[1]]
+        elif self.position[1] == -1:
+            return [self.position[0], 9]
+        elif self.position[1] == 10:
+            return [self.position[0], 0]
+
     def getFleeMode(self) -> bool:
         "Returns True if the shark is 3 or less spaces away from a fish"
 
@@ -136,19 +98,32 @@ class Fish:
         # Checks if angle is 45, 135, 225, 315(diagonal)
             # Fish has to choose randomly btwn the 2 farthest directions
         elif (shark_direction - 45) % 90 == 0:
-            self.position[2] += random.choice([-45, 45])
+            self.position[2] = (shark_direction + 180)
+            choice = random.choice([-45, 45])
+            self.position[2] += choice
             self.position[2] %= 360
+
+            if self.sameNextPosition(self.getXY()):
+                if choice == -45:
+                    self.position[2] += 90
+                else:
+                    self.position[2] += -90
               
         # Angle is arbitrary - anything else
         else:
             # Divide by 90, round to nearest int, multiply by 90
             self.position[2] = ((round((shark_direction)/90)) * 90) % 360
 
-        # Check if facing wall
+        # Check if facing wall, exclude direction
+        check_position = self.position[:2]
         if self.facingWall():
-            
+            check_position = self.getThroughWallPosition()
 
         # Check if on another fish
-        if self.sameNextPosition():
+        if self.sameNextPosition(check_position):
+            return self.position
+        else:
+            # fish has another option
+            return self.getXY()
 
             
