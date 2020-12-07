@@ -7,6 +7,7 @@ import math
 import PIL.Image
 import PIL.ImageTk
 
+
 class SharkGUI:
     def __init__(self):
         self.animation_fps = 10
@@ -63,17 +64,20 @@ class SharkGUI:
                         Image(Point(1300, 400),
                               "gui/purple_fish_low_res.png")
                         .draw(self.win),
-                        Image(Point(1300, 400), "gui/shark_low_res.png")
+                        Image(Point(979, 219), "gui/shark_low_res.png")
                         .draw(self.win)]
 
     def disableEntry(self):
         for entry in self.entries:
             entry.entry.config(state=tk.DISABLED, highlightcolor="#B1E5FC")
 
-    def getCoordinates(self) -> tuple:
-        return (self.entries[0].getText().strip("( )").split(",", 1),
-                self.entries[1].getText().strip("( )").split(",", 1),
-                self.entries[1].getText().strip("( )").split(",", 1))
+    def getCoordinates(self) -> list:
+        entries = ["", "", ""]
+        for i in range(3):
+            entries[i] = "".join(list(filter('0123456789,'.__contains__,
+                                             self.entries[i].getText())
+                                      )).split(",", 1)
+        return entries
 
     def displayMessage(self, string):
         self.message.setText(string)
@@ -264,6 +268,7 @@ class SharkGUI:
 if __name__ == "__main__":
     testGUI = SharkGUI()
     testGUI.win.getMouse()
+    print(testGUI.getCoordinates())
     testGUI.jumpToCoordinates([[0, 0, 0], [0, 1, 180],
                                [0, 2, 180], [7, 2, 0]])
     testGUI.win.getMouse()
