@@ -14,6 +14,8 @@ except ImportError:
     os.system("python3 -m pip install --upgrade pip")
     os.system("python3 -m pip uninstall pil")
     os.system("python3 -m pip install --upgrade --force-reinstall Pillow")
+    import PIL.Image
+    import PIL.ImageTk
 
 
 class SharkGUI:
