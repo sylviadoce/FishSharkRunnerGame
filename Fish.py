@@ -42,32 +42,32 @@ class Fish:
             # If flee mode and planning to go thru wall, enter on other side
             if (self.getFleeMode() and self.position[2] == 180 and
                 random_xmove == -1):
-                self.position[0] == 10
+                self.position[0] = 10
             # Otherwise turn around and move one
             else:
-                self.position[2] == 0
-                self.position[0] == 1
+                self.position[2] = 0
+                self.position[0] = 1
         elif self.position[0] == 10:
             if (self.getFleeMode() and self.position[2] == 0 and
                 random_xmove == 1):
-                self.position[0] == 0
+                self.position[0] = 0
             else:
-                self.position[2] == 180
-                self.position[0] == 9
+                self.position[2] = 180
+                self.position[0] = 9
         elif self.position[1] == 10:
             if (self.getFleeMode() and self.position[2] == 90 and
                 random_ymove == 1):
-                self.position[1] == 0
+                self.position[1] = 0
             else:
-                self.position[2] == 270
-                self.position[0] == 9
+                self.position[2] = 270
+                self.position[0] = 9
         elif self.position[1] == 0:
             if (self.getFleeMode() and self.position[2] == 270 and
                 random_ymove == -1):
-                self.position[1] == 10
+                self.position[1] = 10
             else:
-                self.position[2] == 90
-                self.position[0] == 1
+                self.position[2] = 90
+                self.position[0] = 1
         
         # Next fish move is in opposite direction - closest NESW if diagonal
         if self.getFleeMode():
@@ -87,7 +87,7 @@ class Fish:
                   -(math.pi)/4 or shark_direction == (3*math.pi)/4 or
                   shark_direction == -(3*math.pi)/4):
                 shark_direction = degrees(shark_direction)/90
-                random_flee == random.randrange(0,2)
+                random_flee = random.randrange(0,2)
                 if shark_direction == 0.5:
                     if random_flee == 0: self.position[2] = 0
                     else: self.position[2] = 90
