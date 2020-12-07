@@ -70,10 +70,10 @@ class SharkGUI:
         for entry in self.entries:
             entry.entry.config(state=tk.DISABLED, highlightcolor="#B1E5FC")
 
-    def getCoordinates(self) -> list:
-        return [self.entries[0].getText().strip("( )").split(",", 1),
+    def getCoordinates(self) -> tuple:
+        return (self.entries[0].getText().strip("( )").split(",", 1),
                 self.entries[1].getText().strip("( )").split(",", 1),
-                self.entries[1].getText().strip("( )").split(",", 1)]
+                self.entries[1].getText().strip("( )").split(",", 1))
 
     def displayMessage(self, string):
         self.message.setText(string)
@@ -118,8 +118,8 @@ class SharkGUI:
                           // (total_time * self.animation_fps),
                           (target_position[1] - current_position[1])
                           // (total_time * self.animation_fps)]
-        # print("target move", index, self.canvasToGrid(current_position),
-        #       self.canvasToGrid(target_position))
+        print("target move", index, self.canvasToGrid(current_position),
+              self.canvasToGrid(target_position))
         self._continueSpriteMove(
             index, target_position, delta_position, 0,
             int(total_time * self.animation_fps) - 1,
@@ -225,6 +225,12 @@ class SharkGUI:
             else:
                 self.images[i] = self.regular_images[i]
             self.spriteRotate(i, self.rotations[i])
+
+    def setDead(self, is_dead: list):
+        for i in range(len(is_dead)):
+            if is_dead[i]:
+                self.sprites[i].undraw()
+                self.spriteMoveTo(i, [-10, -10])
 
     def checkThroughMovement(self, i: int, next_pos: list,
                              current_position: list):
