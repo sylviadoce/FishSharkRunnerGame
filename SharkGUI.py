@@ -8,14 +8,10 @@ try:
     import PIL.Image
     import PIL.ImageTk
 
-except ImportError:
-    import os
-    print("Attempting to install pillow library...")
-    os.system("python3 -m pip install --upgrade pip")
-    os.system("python3 -m pip uninstall pil")
-    os.system("python3 -m pip install --upgrade --force-reinstall Pillow")
-    import PIL.Image
-    import PIL.ImageTk
+except Exception:
+    exit("pillow library not installed correctly. Try the following:\n"
+         "python3 -m pip uninstall pil\n"
+         "python3 -m pip install --upgrade --force-reinstall Pillow")
 
 
 class SharkGUI:
