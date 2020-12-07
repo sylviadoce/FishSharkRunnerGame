@@ -136,9 +136,13 @@ class Fish:
         return list
 
     def getDirection(self) -> int:
+        "Gets the direction z from the list x, y, z of self"
+        
         self.direction = init_pos[2]
     
     def getFleeMode(self) -> bool:
+        "Returns True if the shark is 3 or less spaces away from a fish"
+        
         # Checks whether any fish is 3 or less spaces away from shark
             # If so, fleemode is True
         return ((shark_pos[0] - self.position[0]) <= 3 or (shark_pos[1] -
