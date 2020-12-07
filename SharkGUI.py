@@ -4,15 +4,8 @@ from Button import Button
 from graphics import GraphWin, tk, Image, Point, Entry, Text
 import math
 
-try:
-    import PIL.Image
-    import PIL.ImageTk
-
-except Exception:
-    exit("pillow library not installed correctly. Try the following:\n"
-         "python3 -m pip uninstall pil\n"
-         "python3 -m pip install --upgrade --force-reinstall Pillow")
-
+import PIL.Image
+import PIL.ImageTk
 
 class SharkGUI:
     def __init__(self):
