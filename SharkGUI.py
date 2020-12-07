@@ -2,9 +2,19 @@
 
 from Button import Button
 from graphics import GraphWin, tk, Image, Point, Entry, Text
-import PIL.Image
-import PIL.ImageTk
 import math
+
+try:
+    import PIL.Image
+    import PIL.ImageTk
+
+except ImportError:
+    import os
+    print("Attempting to install pillow library...")
+    os.system("python3 -m pip install --upgrade pip")
+    os.system("python3 -m pip uninstall pil")
+    os.system("python3 -m pip uninstall pillow")
+    os.system("python3 -m pip install --upgrade Pillow")
 
 
 class SharkGUI:
