@@ -13,8 +13,7 @@ except ImportError:
     print("Attempting to install pillow library...")
     os.system("python3 -m pip install --upgrade pip")
     os.system("python3 -m pip uninstall pil")
-    os.system("python3 -m pip uninstall pillow")
-    os.system("python3 -m pip install --upgrade Pillow")
+    os.system("python3 -m pip install --upgrade --force-reinstall Pillow")
 
 
 class SharkGUI:
