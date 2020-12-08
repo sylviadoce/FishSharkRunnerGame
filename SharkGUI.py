@@ -31,7 +31,8 @@ class SharkGUI:
 
         self.start_button = Button(Point(215, 430), 316, 48, "Start")
         self.move_button = Button(Point(212, 664),
-                                  316, 48, "Move").deactivate()
+                                  316, 48, "Move Fish").deactivate()
+        self.is_shark_move = False
         self.quit_button = Button(Point(212, 736), 320, 48, "Quit")
         self.quit_button.setFill("").setOutline("")
         for e in (self.start_button.getElements() +
@@ -70,6 +71,8 @@ class SharkGUI:
     def disableEntry(self):
         for entry in self.entries:
             entry.entry.config(state=tk.DISABLED, highlightcolor="#B1E5FC")
+        self.start_button.deactivate()
+        self.move_button.activate()
 
     def getCoordinates(self) -> list:
         entries = ["", "", ""]
@@ -89,17 +92,6 @@ class SharkGUI:
             return True
         else:
             return False
-
-    def getMovePressed(self, point) -> bool:
-        return self.move_button.clicked(point)
-
-    def getQuitPressed(self, point) -> bool:
-        if self.quit_button.clicked(point):
-            quit("Quit Button Pressed")
-        return False
-
-    def setMoveButtonLabel(self, label):
-        self.move_button.setLabel(label)
 
     def gridToCanvas(self, xy: list):
         return [xy[0] * 72 + 475, xy[1] * 72 + 75]
@@ -263,6 +255,23 @@ class SharkGUI:
                            self.gridToCanvas(moves[2]),
                            self.gridToCanvas(moves[1]))
         return next_pos, current_position
+
+    def handleMouse(self):
+        point = self.win.getMouse()
+        if self.quit_button.clicked(point):
+            quit("Quit Button Pressed")
+        elif self.start_button.clicked(point):
+            return 1
+        elif self.move_button.clicked(point):
+            if self.is_shark_move:
+                self.is_shark_move = False
+                self.move_button.setLabel("Move Fish")
+                return 2
+            else:
+                self.is_shark_move = True
+                self.move_button.setLabel("Move Shark")
+                return 3
+
 
 
 if __name__ == "__main__":
