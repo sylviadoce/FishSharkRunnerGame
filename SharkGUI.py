@@ -48,12 +48,12 @@ class SharkGUI:
         self.rotations = [361] * 4
         self.regular_images = [
             PIL.Image.open("gui/orange_fish_low_res.png"),
-            PIL.Image.open("gui/yellow_fish_low_res.png"),
             PIL.Image.open("gui/purple_fish_low_res.png"),
+            PIL.Image.open("gui/yellow_fish_low_res.png"),
             PIL.Image.open("gui/shark_low_res.png")]
         self.flee_images = [PIL.Image.open("gui/orange_fish_flee.png"),
-                            PIL.Image.open("gui/yellow_fish_flee.png"),
                             PIL.Image.open("gui/purple_fish_flee.png"),
+                            PIL.Image.open("gui/yellow_fish_flee.png"),
                             PIL.Image.open("gui/shark_low_res.png")]
         self.images = self.regular_images[:]
         self.sprites = [Image(Point(1300, 400),
@@ -177,7 +177,7 @@ class SharkGUI:
             self.animation_status[index] = True
 
     def jumpToCoordinates(self, coordinates: list):
-        for i in range(len(self.sprites)):
+        for i in range(len(coordinates)):
             self.spriteMoveTo(i, self.gridToCanvas(coordinates[i]))
             if len(coordinates[i]) > 2:
                 self.spriteRotate(i, coordinates[i][2])
