@@ -97,6 +97,8 @@ def moveFish():
         fleemode.append(fishes[i].getFleeMode(all_coordinates[3]))
         all_coordinates[i] = fishes[i].getNextPosition(all_coordinates[:])
 
+    print(all_coordinates)
+
     # Connect fleemode fish movements with the graphics
     shark_GUI.setFleeMode(fleemode)
     shark_GUI.setCoordinates(all_coordinates[:3])
@@ -108,16 +110,18 @@ def moveShark():
     shark_GUI.setSharkCoordinates(all_coordinates[3])
 
     dead_fishes = []
-    print("Dead fishes:", dead_fishes)
 
     # Check if fish is dead
     for i in range(3):
-        if all_coordinates[i][:2] == all_coordinates[3][:2]:
+        if (all_coordinates[i][:2] == all_coordinates[3][:2]
+            or fishes[i].isDead()):
             print("Shark should be eating fish rn")
-            fishes[i].setDead(fishes[i].isDead())
+            fishes[i].setDead(dead_fishes)
             dead_fishes.append(True)
         else:
             dead_fishes.append(False)
+
+    print("Dead fishes:", dead_fishes)
 
     # Let GUI keep track of dead fishes
     shark_GUI.setDead(dead_fishes)
