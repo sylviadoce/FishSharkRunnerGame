@@ -186,6 +186,10 @@ class SharkGUI:
             if len(coordinates[i]) > 2:
                 self.spriteRotate(i, coordinates[i][2])
 
+    def setSharkCoordinates(self, next_pos: list):
+        # TODO: set only shark coords
+        return
+
     def setCoordinates(self, next_pos: list,
                        rotation_seconds: float = 1, move_seconds: int = 1):
         rotate = 0
@@ -214,9 +218,6 @@ class SharkGUI:
                 self.spriteMoveOverTime(
                     i, move_seconds, self.gridToCanvas(next_pos[i]))
                 self.animation_status[i + 4] = False
-        if rotate:
-            self.win.mainloop(rotation_seconds)
-        self.win.mainloop(move_seconds)
 
     def animationComplete(self) -> bool:
         return all(self.animation_status)
@@ -230,6 +231,9 @@ class SharkGUI:
             self.spriteRotate(i, self.rotations[i])
 
     def setDead(self, is_dead: list):
+        self.win.after(2020, self._callbackSetDead, is_dead)
+
+    def _callbackSetDead(self, is_dead: list):
         for i in range(len(is_dead)):
             if is_dead[i]:
                 self.sprites[i].undraw()
@@ -267,10 +271,10 @@ class SharkGUI:
         point = self.win.getMouse()
         if self.quit_button.clicked(point):
             quit("Quit Button Pressed")
-        elif self.start_button.clicked(point):
+        if self.start_button.clicked(point):
             print("start")
             return 1
-        elif self.move_button.clicked(point):
+        if self.move_button.clicked(point): # TODO: check if animation is complete, else pass 0
             if self.is_shark_move:
                 self.is_shark_move = False
                 self.move_button.setLabel("Move Fish")
@@ -281,6 +285,7 @@ class SharkGUI:
                 self.move_button.setLabel("Move Shark")
                 print("move shark")
                 return 3
+        return 0
 
 
 
