@@ -48,7 +48,7 @@ class Fish:
     def getDirection(self) -> int:
         "Gets the direction z from the list x, y, z of self"
 
-        return init_pos[2]
+        return self.position[2]
 
     def facingWall(self) -> bool:
         "Determines if fish is about to go into wall"

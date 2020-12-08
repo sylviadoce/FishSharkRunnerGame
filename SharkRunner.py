@@ -114,13 +114,14 @@ def moveShark():
     for i in range(3):
         if all_coordinates[i][:2] == all_coordinates[3][:2]:
             print("Shark should be eating fish rn")
-            fishes[i].setDead()
+            fishes[i].setDead(fishes[i].isDead())
             dead_fishes.append(True)
         else:
             dead_fishes.append(False)
 
     # Let GUI keep track of dead fishes
     shark_GUI.setDead(dead_fishes)
+    print("GUI should register fish death")
     
     # Check for stalemate
     stalemate = shark.getStalemate()
