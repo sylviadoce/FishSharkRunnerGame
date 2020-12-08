@@ -268,15 +268,18 @@ class SharkGUI:
         if self.quit_button.clicked(point):
             quit("Quit Button Pressed")
         elif self.start_button.clicked(point):
+            print("start")
             return 1
         elif self.move_button.clicked(point):
             if self.is_shark_move:
                 self.is_shark_move = False
                 self.move_button.setLabel("Move Fish")
+                print("move fish")
                 return 2
             else:
                 self.is_shark_move = True
                 self.move_button.setLabel("Move Shark")
+                print("move shark")
                 return 3
 
 
