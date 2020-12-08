@@ -12,6 +12,9 @@ class Shark:
         self.max_distance = 2.49  # Max direct distance
         self.following_fish = -1
 
+    def getStalemate(self):
+        return False
+
     def getNextPosition(self, fish_pos: list) -> list:
         distances = []
         for pos in fish_pos:
