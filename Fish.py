@@ -17,20 +17,22 @@ class Fish:
         self.dead = False
         self.position.append((random.randrange(0,3))*90)
 
-    def getNextPosition(self, shark_pos: list, otherfishA_pos: list,
-                        otherfishB_pos: list) -> list:
+    def getNextPosition(self, all_coordinates: list) -> list:
         """Gets the fishes' next positions based on each others' locations,
             considering flee mode"""
+
+        # Pop fish_id from the all_coordinates list
+        all_coordinates.pop(self.fish_id)
 
         # Check if fish is dead and move off the grid
         if self.dead:
             return [-10,-10]
-        if self.getFleeMode():
-            return self.getFleeModeNextPosition()
+        if self.getFleeMode(all_coordinates[2]):
+            return self.getFleeModeNextPosition(all_coordinates)
         if self.facingWall():
             self.position[2] += 180
             self.position[2] %= 360
-        if self.sameNextPosition(self.getXY()):
+        if self.sameNextPosition(self.getXY(), all_coordinates):
             return self.position
 
         return self.getXY()
@@ -38,15 +40,15 @@ class Fish:
     def getXY(self) -> list:
         "Gets next move along x or y axis"
         
-        self.position[0] = math.cos(self.position[2])
-        self.position[1] = math.sin(self.position[2])
+        self.position[0] += round(math.cos(self.position[2]))
+        self.position[1] += round(math.sin(self.position[2]))
         
         return self.position
 
     def getDirection(self) -> int:
         "Gets the direction z from the list x, y, z of self"
-        
-        self.direction = init_pos[2]
+
+        return init_pos[2]
 
     def facingWall(self) -> bool:
         "Determines if fish is about to go into wall"
@@ -56,39 +58,38 @@ class Fish:
                 (self.position[1] == 0 and self.position[2] == 90) or
                 (self.position[1] == 9 and self.position[2] == 270))
 
-    def sameNextPosition(self, position: list) -> bool:
+    def sameNextPosition(self, position: list, all_coordinates: list) -> bool:
         "Returns True if two fish are moving to the same position"
         
-        return (position[:2] == otherfishA_pos[:2] or position[:2] ==
-            otherfishB_pos[:2])
+        return (position[:2] == all_coordinates[0][:2] or position[:2] ==
+            all_coordinates[1][:2])
 
     def getThroughWallPosition(self) -> list:
         """Detecting in flee mode that fish goes through the wall,
             returns new position""" 
 
-        if self.position[0] == -1:
+        if self.position[0] == 0:
             return [9, self.position[1]]
-        elif self.position[0] == 10:
+        elif self.position[0] == 9:
             return [0, self.position[1]]
-        elif self.position[1] == -1:
+        elif self.position[1] == 0:
             return [self.position[0], 9]
-        elif self.position[1] == 10:
+        elif self.position[1] == 9:
             return [self.position[0], 0]
 
-    def getFleeMode(self) -> bool:
+    def getFleeMode(self, shark_pos: list) -> bool:
         "Returns True if the shark is 3 or less spaces away from a fish"
 
         return ((shark_pos[0] - self.position[0]) <= 3 or (shark_pos[1] -
             self.position[1]) <= 3)
 
-    def getFleeModeNextPosition(self, shark_pos: list, otherfishA_pos: list,
-                        otherfishB_pos: list) -> list:
+    def getFleeModeNextPosition(self, all_coordinates: list) -> list:
         "Determines fish's next position based on shark's angle in flee mode"
         
         # Finds angle btwn fish/shark, convert to degrees, [0,360) interval
         shark_direction = math.degrees(
-            math.atan2((self.position[1] - shark_pos[1]),
-                       (self.position[0] - shark_pos[0]))) % 360
+            math.atan2((self.position[1] - all_coordinates[2][1]),
+                       (self.position[0] - all_coordinates[2][0]))) % 360
         
         # Checks if angle is 0, 90, 180, 270 (straight)
         if shark_direction % 90 == 0:
@@ -103,7 +104,7 @@ class Fish:
             self.position[2] += choice
             self.position[2] %= 360
 
-            if self.sameNextPosition(self.getXY()):
+            if self.sameNextPosition(self.getXY(), all_coordinates):
                 if choice == -45:
                     self.position[2] += 90
                 else:
@@ -120,7 +121,7 @@ class Fish:
             check_position = self.getThroughWallPosition()
 
         # Check if on another fish
-        if self.sameNextPosition(check_position):
+        if self.sameNextPosition(check_position, all_coordinates):
             return self.position
         else:
             # fish has another option
@@ -131,7 +132,7 @@ class Fish:
         
         self.dead = dead
 
-    def getPosition(position):
+    def getPosition(self):
         return self.position
 
     def isDead(self):

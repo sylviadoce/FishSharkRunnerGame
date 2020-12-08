@@ -20,6 +20,9 @@ fishes = []
 # Set stalemate position to False
 stalemate = False
 
+#
+all_coordinates = [[], [], [], [7,2]]
+
 def main():
 
     while fishAlive and not stalemate:
@@ -35,7 +38,7 @@ def main():
             moveShark()
 
 def fishAlive():
-    return not(fishes[0].isDead() and fishes[1].isDead() and fished[2].isDead()):
+    return not(fishes[0].isDead() and fishes[1].isDead() and fishes[2].isDead())
 
 def start():
 
@@ -71,6 +74,9 @@ def start():
     # Coordinates are locked in
     shark_GUI.disableEntry()
 
+    # Set all_coordinates to all fish coordinates
+    all_coordinates[:3] = fish_coordinates
+
     # Add all fish coordinates to a list fish
     for i in range(0,3):
         fishes.append(Fish(i, fish_coordinates[i]))
@@ -84,38 +90,39 @@ def start():
 def moveFish():
 
     # Create empty lists for fleemode and position coordinates
-    fleemode, position = [], []
+    fleemode = []
 
     # Go through the fish coordinates list and append fleemod and position
-    for fish in fishes:
-        fleemode.append(fish.getFleeMode())
-        position.append(fish.getNextPosition())
+    for i in range(3):
+        fleemode.append(fishes[i].getFleeMode(all_coordinates[3]))
+        all_coordinates[i] = fishes[i].getNextPosition(all_coordinates[:])
 
     # Connect fleemode fish movements with the graphics
     shark_GUI.setFleeMode(fleemode)
-    shark_GUI.setCoordinates(position)
-    
-    return
+    shark_GUI.setCoordinates(all_coordinates[:3])
 
 def moveShark():
 
-    shark_position = shark.getNextPosition()
+    all_coordinates[3] = shark.getNextPosition(all_coordinates[:3])
 
-    shark_GUI.setSharkCoordinates(shark_position)
+    shark_GUI.setSharkCoordinates(all_coordinates[3])
 
     dead_fishes = []
+    print("Dead fishes:", dead_fishes)
 
     # Check if fish is dead
-    for fish in fishes:
-        if fish.getPosition()[:2] == shark_position[:2]:
-            fish.setDead()
+    for i in range(3):
+        if all_coordinates[i][:2] == all_coordinates[3][:2]:
+            print("Shark should be eating fish rn")
+            fishes[i].setDead()
             dead_fishes.append(True)
         else:
             dead_fishes.append(False)
+
+    # Let GUI keep track of dead fishes
+    shark_GUI.setDead(dead_fishes)
     
     # Check for stalemate
     stalemate = shark.getStalemate()
-    
-    return
 
 main()
