@@ -81,6 +81,7 @@ class SharkGUI:
                                              self.entries[i].getText())
                                       )).split(",", 1)
             entries[i][0] = int(entries[i][0].strip(","))
+            entries[i][1] = int(entries[i][1].strip(","))
         print(entries)
         return entries
 
