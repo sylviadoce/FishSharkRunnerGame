@@ -81,8 +81,8 @@ class SharkGUI:
                 entries[i] = "".join(list(filter(
                     '0123456789,'.__contains__, self.entries[i].getText())
                                           )).split(",", 1)
-                entries[i][0] = int(entries[i][0].strip(","))
-                entries[i][1] = int(entries[i][1].strip(","))
+                for j in range(len(entries[i])):
+                    entries[i][j] = int(entries[i][j].strip(","))
             print(entries)
         except ValueError:
             return [[], [], []]
