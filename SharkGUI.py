@@ -187,37 +187,36 @@ class SharkGUI:
                 self.spriteRotate(i, coordinates[i][2])
 
     def setSharkCoordinates(self, next_pos: list):
-        # TODO: set only shark coords
-        return
+        self.setCoordinate(3, next_pos, 1, 1)
 
     def setCoordinates(self, next_pos: list,
-                       rotation_seconds: float = 1, move_seconds: int = 1):
-        rotate = 0
+                       rotation_sec: float = 1, move_sec: int = 1):
         for i in range(len(next_pos)):
-            current_position = self.canvasToGrid([
-                self.sprites[i].getAnchor().getX(),
-                self.sprites[i].getAnchor().getY()])
-            if len(next_pos[i]) < 3:
-                next_pos[i].append(int(math.degrees(math.atan2(
-                    current_position[1] - next_pos[i][1],
-                    next_pos[i][0] - current_position[0]))))
-            next_pos, current_position = self.checkThroughMovement(
-                i, next_pos, current_position)
-            if next_pos[i][2] != self.rotations[i]:
-                rotate += 1
-                self.animation_status[i] = False
-                self.spriteRotateOverTime(i, rotation_seconds,
-                                          next_pos[i][2])
+            self.setCoordinate(i, next_pos[i], rotation_sec, move_sec)
 
-                if next_pos[i][:2] != current_position:
-                    self.win.after(
-                        rotation_seconds * 1000, self.spriteMoveOverTime,
-                        i, move_seconds, self.gridToCanvas(next_pos[i]))
-                    self.animation_status[i + 4] = False
-            elif next_pos[i][:2] != current_position:
-                self.spriteMoveOverTime(
-                    i, move_seconds, self.gridToCanvas(next_pos[i]))
+    def setCoordinate(self, i: int, next_pos: list,
+                      rotation_sec: float = 1, move_sec: int = 1):
+        current_position = self.canvasToGrid([
+            self.sprites[i].getAnchor().getX(),
+            self.sprites[i].getAnchor().getY()])
+        if len(next_pos) < 3:
+            next_pos.append(int(math.degrees(math.atan2(
+                current_position[1] - next_pos[1],
+                next_pos[0] - current_position[0]))))
+        next_pos, current_position = self.checkThroughMovement(
+            i, next_pos, current_position)
+        if next_pos[2] != self.rotations[i]:
+            self.animation_status[i] = False
+            self.spriteRotateOverTime(i, rotation_sec, next_pos[2])
+            if next_pos[:2] != current_position:
+                self.win.after(
+                    rotation_sec * 1000, self.spriteMoveOverTime,
+                    i, move_sec, self.gridToCanvas(next_pos))
                 self.animation_status[i + 4] = False
+        elif next_pos[:2] != current_position:
+            self.spriteMoveOverTime(
+                i, move_sec, self.gridToCanvas(next_pos))
+            self.animation_status[i + 4] = False
 
     def animationComplete(self) -> bool:
         return all(self.animation_status)
@@ -242,24 +241,24 @@ class SharkGUI:
     def checkThroughMovement(self, i: int, next_pos: list,
                              current_position: list):
         moves = [[0, 0], [0, 0], [0, 0]]
-        if next_pos[i][0] == -1:
+        if next_pos[0] == -1:
             # Go through left wall
-            moves = [[-7, next_pos[i][1]],
-                     [11, next_pos[i][1]], [9, next_pos[i][1]]]
-        elif next_pos[i][0] == 10:
+            moves = [[-7, next_pos[1]],
+                     [11, next_pos[1]], [9, next_pos[1]]]
+        elif next_pos[0] == 10:
             # Go through right wall
-            moves = [[11, next_pos[i][1]],
-                     [-7, next_pos[i][1]], [0, next_pos[i][1]]]
-        elif next_pos[i][1] == -1:
+            moves = [[11, next_pos[1]],
+                     [-7, next_pos[1]], [0, next_pos[1]]]
+        elif next_pos[1] == -1:
             # Go through top wall
-            moves = [[next_pos[i][0], -2],
-                     [next_pos[i][0], 11], [next_pos[i][0], 9]]
-        elif next_pos[i][1] == 10:
+            moves = [[next_pos[0], -2],
+                     [next_pos[0], 11], [next_pos[0], 9]]
+        elif next_pos[1] == 10:
             # Go through bottom wall
-            moves = [[next_pos[i][0], 11],
-                     [next_pos[i][0], -2], [next_pos[i][0], 0]]
+            moves = [[next_pos[0], 11],
+                     [next_pos[0], -2], [next_pos[0], 0]]
         if moves != [[0, 0], [0, 0], [0, 0]]:
-            next_pos[i][:2] = moves[0]
+            next_pos[:2] = moves[0]
             self.win.after(2000, self.spriteMoveTo, i,
                            self.gridToCanvas(moves[1]))
             self.win.after(2100, self.spriteMoveOverTime, i, 1,
@@ -274,7 +273,7 @@ class SharkGUI:
         if self.start_button.clicked(point):
             print("start")
             return 1
-        if self.move_button.clicked(point): # TODO: check if animation is complete, else pass 0
+        if self.move_button.clicked(point) and self.animationComplete():
             if self.is_shark_move:
                 self.is_shark_move = False
                 self.move_button.setLabel("Move Fish")
@@ -285,6 +284,7 @@ class SharkGUI:
                 self.move_button.setLabel("Move Shark")
                 print("move shark")
                 return 3
+        print("animationComplete", self.animationComplete())
         return 0
 
 
