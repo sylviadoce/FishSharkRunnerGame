@@ -76,14 +76,18 @@ class SharkGUI:
 
     def getCoordinates(self) -> list:
         entries = ["", "", ""]
-        for i in range(3):
-            entries[i] = "".join(list(filter('0123456789,'.__contains__,
-                                             self.entries[i].getText())
-                                      )).split(",", 1)
-            entries[i][0] = int(entries[i][0].strip(","))
-            entries[i][1] = int(entries[i][1].strip(","))
-        print(entries)
-        return entries
+        try:
+            for i in range(3):
+                entries[i] = "".join(list(filter(
+                    '0123456789,'.__contains__, self.entries[i].getText())
+                                          )).split(",", 1)
+                entries[i][0] = int(entries[i][0].strip(","))
+                entries[i][1] = int(entries[i][1].strip(","))
+            print(entries)
+        except ValueError:
+            return [[], [], []]
+        else:
+            return entries
 
     def displayMessage(self, string):
         self.message.setText(string)
@@ -281,6 +285,8 @@ if __name__ == "__main__":
     testGUI = SharkGUI()
     testGUI.win.getMouse()
     print(testGUI.getCoordinates())
+    testGUI.jumpToCoordinates([[1, 1], [4, 9], [7, 4]])
+    testGUI.win.getMouse()
     testGUI.jumpToCoordinates([[0, 0, 0], [0, 1, 180],
                                [0, 2, 180], [7, 2, 0]])
     testGUI.win.getMouse()
