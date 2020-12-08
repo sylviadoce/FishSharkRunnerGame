@@ -15,6 +15,9 @@ class Shark:
     def getStalemate(self):
         return False
 
+    def getPosition(self):
+        return self.position[:2]
+
     def getNextPosition(self, fish_pos: list) -> list:
         distances = []
         for pos in fish_pos:
@@ -30,13 +33,15 @@ class Shark:
             self.following_fish = distances.index(min(distances))
             closest_fish = fish_pos[self.following_fish]
         fish_distance = math.dist(closest_fish[:2], self.position[:2])
-
-        self.position = [self.position[0] + round(
-                    min(self.max_distance, fish_distance) * (
-                    (closest_fish[0] - self.position[0]) / fish_distance)),
-                         self.position[1] + round(
-                    min(self.max_distance, fish_distance) * (
-                    (closest_fish[1] - self.position[1]) / fish_distance))]
+        if fish_distance != 0:
+            self.position = [self.position[0] + round(
+                        min(self.max_distance, fish_distance) * (
+                            (closest_fish[0] - self.position[0])
+                            / fish_distance)),
+                             self.position[1] + round(
+                        min(self.max_distance, fish_distance) * (
+                            (closest_fish[1] - self.position[1])
+                            / fish_distance))]
         return self.position
 
 
