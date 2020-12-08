@@ -278,12 +278,12 @@ class SharkGUI:
                 self.is_shark_move = False
                 self.move_button.setLabel("Move Fish")
                 print("move fish")
-                return 2
+                return 3
             else:
                 self.is_shark_move = True
                 self.move_button.setLabel("Move Shark")
                 print("move shark")
-                return 3
+                return 2
         print("animationComplete", self.animationComplete())
         return 0
 
