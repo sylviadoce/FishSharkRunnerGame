@@ -126,4 +126,13 @@ class Fish:
             # fish has another option
             return self.getXY()
 
-            
+    def setDead(self, dead):
+        "Defining death"
+        
+        self.dead = dead
+
+    def getPosition(position):
+        return self.position
+
+    def isDead(self):
+        return self.dead
