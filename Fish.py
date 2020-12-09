@@ -45,9 +45,16 @@ class Fish:
         "Gets next move along x or y axis"
 
         print("OG fish direction:", self.position[2])
+
+        print("OG positions:", self.position[0], self.position[1])
+        print("OG direction:", self.position[2])
+        print("math.degrees(math.cos(math.radians(self.position[2])))")
+        print("adding to x:", math.degrees(math.cos(math.radians(self.position[2]))))
+        print("adding to y:", -(round(math.sin(math.radians(self.position[2]))))))
         
         self.position[0] += round(math.cos(math.radians(self.position[2])))
         self.position[1] += -(round(math.sin(math.radians(self.position[2]))))
+
         
         return self.position
 
