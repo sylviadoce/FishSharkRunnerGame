@@ -32,6 +32,7 @@ class Fish:
         if self.getFleeMode(all_coordinates[2]):
             return self.getFleeModeNextPosition(all_coordinates)
         if self.facingWall():
+            print("yes, facing wall and running code")
             self.position[2] += 180
             self.position[2] %= 360
         if self.sameNextPosition(self.position, all_coordinates):
@@ -42,9 +43,11 @@ class Fish:
 
     def getXY(self) -> list:
         "Gets next move along x or y axis"
+
+        print("OG fish direction:", self.position[2])
         
-        self.position[0] += round(math.cos(self.position[2]))
-        self.position[1] += round(math.sin(self.position[2]))
+        self.position[0] += round(math.cos(math.radians(self.position[2])))
+        self.position[1] += -(round(math.sin(math.radians(self.position[2]))))
         
         return self.position
 
@@ -55,11 +58,21 @@ class Fish:
 
     def facingWall(self) -> bool:
         "Determines if fish is about to go into wall"
-        
-        return ((self.position[0] == 0 and self.position[2] == 180) or
+
+        if ((self.position[0] == 0 and self.position[2] == 180) or
                 (self.position[0] == 9 and self.position[2] == 0) or
                 (self.position[1] == 0 and self.position[2] == 90) or
-                (self.position[1] == 9 and self.position[2] == 270))
+                (self.position[1] == 9 and self.position[2] == 270)):
+            print("facing a wall")
+            return True
+        else:
+            print("not facing a wall")
+            return False
+        
+##        return ((self.position[0] == 0 and self.position[2] == 180) or
+##                (self.position[0] == 9 and self.position[2] == 0) or
+##                (self.position[1] == 0 and self.position[2] == 90) or
+##                (self.position[1] == 9 and self.position[2] == 270))
 
     def sameNextPosition(self, position: list, all_coordinates: list) -> bool:
         "Returns True if two fish are moving to the same position"
@@ -93,21 +106,28 @@ class Fish:
         
         # Finds angle btwn fish/shark, convert to degrees, [0,360) interval
         shark_direction = math.degrees(
-            math.atan2((self.position[1] - all_coordinates[2][1]),
-                       (self.position[0] - all_coordinates[2][0]))) % 360
+            math.atan2(math.radians(self.position[1] - all_coordinates[2][1]),
+                       math.radians(self.position[0] - all_coordinates[2][0]))) % 360
+
+        print("shark direction relative to fish:", shark_direction)
         
         # Checks if angle is 0, 90, 180, 270 (straight)
         if shark_direction % 90 == 0:
+            print("shark is on axis")
             # Set fish's new direction to opposite
             self.position[2] = (shark_direction + 180) % 360
+            print("altered fish direction oppo:", self.position[2])
             
         # Checks if angle is 45, 135, 225, 315(diagonal)
             # Fish has to choose randomly btwn the 2 farthest directions
         elif (shark_direction - 45) % 90 == 0:
+            print("shark on 45")
             self.position[2] = (shark_direction + 180)
+            print("altered fish direction oppo:", self.position[2])
             choice = random.choice([-45, 45])
             self.position[2] += choice
             self.position[2] %= 360
+            print("randomized direction choice:", self.position[2])
 
             if self.sameNextPosition(self.getXY(), all_coordinates):
                 if choice == -45:
@@ -117,8 +137,10 @@ class Fish:
               
         # Angle is arbitrary - anything else
         else:
+            print("shark angled, og fish direction:", self.position[2])
             # Divide by 90, round to nearest int, multiply by 90
-            self.position[2] = ((round((shark_direction)/90)) * 90) % 360
+            self.position[2] = ((round(shark_direction/90) * 90) + 180) % 360
+            print("altered fish direction oppo:", self.position[2])
 
         # Check if facing wall, exclude direction
         check_position = self.position[:2]
