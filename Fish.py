@@ -35,7 +35,7 @@ class Fish:
             print("yes, facing wall and running code")
             self.position[2] += 180
             self.position[2] %= 360
-        if self.sameNextPosition(self.position, all_coordinates):
+        if self.sameNextPosition(self.getXY(), all_coordinates):
             print("yes same next pos")
             return self.position
         
@@ -48,15 +48,14 @@ class Fish:
 
         print("OG positions:", self.position[0], self.position[1])
         print("OG direction:", self.position[2])
-        print("math.degrees(math.cos(math.radians(self.position[2])))")
-        print("adding to x:", math.degrees(math.cos(math.radians(self.position[2]))))
-        print("adding to y:", -(round(math.sin(math.radians(self.position[2]))))))
         
-        self.position[0] += round(math.cos(math.radians(self.position[2])))
-        self.position[1] += -(round(math.sin(math.radians(self.position[2]))))
+        print("adding to x:", round(math.cos(math.radians(self.position[2]))))
 
+        print("adding to y:", -round((math.sin(math.radians(self.position[2])))))
         
-        return self.position
+        return [self.position[0] + round(math.cos(math.radians(self.position[2]))),
+                self.position[1] - (round(math.sin(math.radians(self.position[2]))))]
+
 
     def getDirection(self) -> int:
         "Gets the direction z from the list x, y, z of self"
@@ -103,6 +102,9 @@ class Fish:
     def getFleeMode(self, shark_pos: list) -> bool:
         "Returns True if the shark is 3 or less spaces away from a fish"
 
+        print("shark init pos:", shark_pos)
+        print("fish position:", self.position)
+        
         return (abs((shark_pos[0] - self.position[0]) <= 3) and
                 abs((shark_pos[1] - self.position[1])) <= 3)
 
@@ -149,8 +151,8 @@ class Fish:
             self.position[2] = ((round(shark_direction/90) * 90) + 180) % 360
             print("altered fish direction oppo:", self.position[2])
 
-        # Check if facing wall, exclude direction
-        check_position = self.position[:2]
+        # Check if facing wall, exclude direction, of next position
+        check_position = self.getXY()
         if self.facingWall():
             check_position = self.getThroughWallPosition()
 
