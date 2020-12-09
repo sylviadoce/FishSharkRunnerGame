@@ -38,23 +38,27 @@ class Fish:
         if self.sameNextPosition(self.getXY(), all_coordinates):
             print("yes same next pos")
             return self.position
+
+        # self.position[:2] = self.getXY() doesn't work - issue is associated
+        # with self.getXY() as a parameter because it doubles
         
-        return self.getXY()
+        return self.getXY() 
 
     def getXY(self) -> list:
         "Gets next move along x or y axis"
+
+        print("list of self.position:", self.position)
 
         print("OG fish direction:", self.position[2])
 
         print("OG positions:", self.position[0], self.position[1])
         print("OG direction:", self.position[2])
-        
-        print("adding to x:", round(math.cos(math.radians(self.position[2]))))
 
-        print("adding to y:", -round((math.sin(math.radians(self.position[2])))))
+        print("rounded adding to x:", round(math.cos(math.radians(self.position[2]))))
+        print("rounded adding to y:", -round(math.sin(math.radians(self.position[2]))))
         
         return [self.position[0] + round(math.cos(math.radians(self.position[2]))),
-                self.position[1] - (round(math.sin(math.radians(self.position[2]))))]
+                self.position[1] - round(math.sin(math.radians(self.position[2])))]
 
 
     def getDirection(self) -> int:
@@ -82,6 +86,9 @@ class Fish:
 
     def sameNextPosition(self, position: list, all_coordinates: list) -> bool:
         "Returns True if two fish are moving to the same position"
+
+        print("position list in samenextposition:", position)
+        print("all coordinates in same next pos:", all_coordinates)
         
         return (position[:2] == all_coordinates[0][:2] or position[:2] ==
             all_coordinates[1][:2])
