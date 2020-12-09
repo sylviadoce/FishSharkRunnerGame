@@ -35,7 +35,8 @@ class Fish:
             print("yes, facing wall and running code")
             self.position[2] += 180
             self.position[2] %= 360
-        if self.sameNextPosition(self.getXY(), all_coordinates):
+            
+        if self.sameNextPosition(self.position, all_coordinates):
             print("yes same next pos")
             return self.position
 
