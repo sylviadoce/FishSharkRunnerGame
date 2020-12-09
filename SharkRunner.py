@@ -80,7 +80,7 @@ def start():
     # Add all fish coordinates to a list fish
     for i in range(0,3):
         fishes.append(Fish(i, fish_coordinates[i]))
-        
+
     # Show fish on board
     shark_GUI.jumpToCoordinates(fish_coordinates)
     
@@ -92,12 +92,10 @@ def moveFish():
     # Create empty lists for fleemode and position coordinates
     fleemode = []
 
-    # Go through the fish coordinates list and append fleemod and position
+    # Go through the fish coordinates list and append fleemode and position
     for i in range(3):
         fleemode.append(fishes[i].getFleeMode(all_coordinates[3]))
         all_coordinates[i] = fishes[i].getNextPosition(all_coordinates[:])
-
-    print(all_coordinates)
 
     # Connect fleemode fish movements with the graphics
     shark_GUI.setFleeMode(fleemode)

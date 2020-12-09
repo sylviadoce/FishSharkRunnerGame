@@ -11,7 +11,7 @@ class Fish:
     def __init__(self, fish_id, init_pos: list):
         """Sets the fish position to a list of x-coord, y-coord, and
             a randomized direction NESW"""
-        
+
         self.position = init_pos
         self.fish_id = fish_id
         self.dead = False
@@ -20,6 +20,8 @@ class Fish:
     def getNextPosition(self, all_coordinates: list) -> list:
         """Gets the fishes' next positions based on each others' locations,
             considering flee mode"""
+
+        print("getting next position")
 
         # Pop fish_id from the all_coordinates list
         all_coordinates.pop(self.fish_id)
@@ -32,9 +34,10 @@ class Fish:
         if self.facingWall():
             self.position[2] += 180
             self.position[2] %= 360
-        if self.sameNextPosition(self.getXY(), all_coordinates):
-            return self.position
-
+##        if self.sameNextPosition(self.position, all_coordinates):
+##            print("yes same next pos")
+##            return self.position
+        
         return self.getXY()
 
     def getXY(self) -> list:
@@ -80,11 +83,13 @@ class Fish:
     def getFleeMode(self, shark_pos: list) -> bool:
         "Returns True if the shark is 3 or less spaces away from a fish"
 
-        return ((shark_pos[0] - self.position[0]) <= 3 or (shark_pos[1] -
-            self.position[1]) <= 3)
+        return (abs((shark_pos[0] - self.position[0]) <= 3) and
+                abs((shark_pos[1] - self.position[1])) <= 3)
 
     def getFleeModeNextPosition(self, all_coordinates: list) -> list:
         "Determines fish's next position based on shark's angle in flee mode"
+
+        print("moving flee mode")
         
         # Finds angle btwn fish/shark, convert to degrees, [0,360) interval
         shark_direction = math.degrees(
