@@ -42,6 +42,7 @@ class Shark:
                         min(self.max_distance, fish_distance) * (
                             (closest_fish[1] - self.position[1])
                             / fish_distance))]
+        print("shark follow", self.following_fish, "dist", fish_distance)
         return self.position
 
 

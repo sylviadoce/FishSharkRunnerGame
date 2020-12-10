@@ -273,7 +273,7 @@ class SharkGUI:
         if self.start_button.clicked(point):
             print("start")
             return 1
-        if self.move_button.clicked(point) and self.animationComplete():
+        if self.move_button.clicked(point): # and self.animationComplete():
             if self.is_shark_move:
                 self.is_shark_move = False
                 self.move_button.setLabel("Move Fish")
@@ -284,7 +284,8 @@ class SharkGUI:
                 self.move_button.setLabel("Move Shark")
                 print("move shark")
                 return 2
-        print("animationComplete", self.animationComplete())
+        print("animationComplete", self.animationComplete(),
+              self.animation_status)
         return 0
 
 
