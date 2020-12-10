@@ -221,7 +221,9 @@ class SharkGUI:
     def animationComplete(self) -> bool:
         return all(self.animation_status)
 
-    def setFleeMode(self, in_flee_mode: list):
+    def setFleeMode(self, in_flee_mode: list, delay: int = 0):
+        if delay:
+            self.win.after(delay*1000, self.setFleeMode, in_flee_mode)
         for i in range(len(in_flee_mode)):
             if in_flee_mode[i]:
                 self.images[i] = self.flee_images[i]
