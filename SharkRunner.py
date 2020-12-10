@@ -80,6 +80,8 @@ def start():
     # Add all fish coordinates to a list fish
     for i in range(0,3):
         fishes.append(Fish(i, fish_coordinates[i]))
+        fish_coordinates[i][2] = fishes[i].getDirection()
+        print("direction of current fish", fish_coordinates[i])
 
     # Show fish on board
     shark_GUI.jumpToCoordinates(fish_coordinates)
@@ -101,6 +103,14 @@ def moveFish():
     shark_GUI.setFleeMode(fleemode)
     shark_GUI.setCoordinates(all_coordinates[:3])
 
+    for i in range(3):
+        if fishes[i].getThroughWallPosition():
+            fishes[i].setPosition(fishes[i].getThroughWallPosition())
+            fleemode[i] = fishes[i].getFleeMode(all_coordinates[3])
+
+    # Reset the fleemode list
+    shark_GUI.setFleeMode(fleemode)
+                
 def moveShark():
 
     all_coordinates[3] = shark.getNextPosition(all_coordinates[:3])
