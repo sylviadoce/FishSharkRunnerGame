@@ -33,7 +33,7 @@ class Shark:
             self.following_fish = distances.index(min(distances))
             closest_fish = fish_pos[self.following_fish]
         fish_distance = math.dist(closest_fish[:2], self.position[:2])
-        if fish_distance != 0:
+        if fish_distance > 0.4:
             self.position = [self.position[0] + round(
                         min(self.max_distance, fish_distance) * (
                             (closest_fish[0] - self.position[0])
