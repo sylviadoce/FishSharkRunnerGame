@@ -68,10 +68,10 @@ class Fish:
     def facingWall(self) -> bool:
         "Determines if fish is about to go into wall"
 
-        if ((self.position[0] == 0 and self.position[2] == 180) or
-                (self.position[0] == 9 and self.position[2] == 0) or
-                (self.position[1] == 0 and self.position[2] == 90) or
-                (self.position[1] == 9 and self.position[2] == 270)):
+        if ((self.position[0] <= 0 and self.position[2] == 180) or
+                (self.position[0] >= 9 and self.position[2] == 0) or
+                (self.position[1] <= 0 and self.position[2] == 90) or
+                (self.position[1] >= 9 and self.position[2] == 270)):
             print("facing a wall")
             return True
         else:
@@ -83,14 +83,32 @@ class Fish:
 ##                (self.position[1] == 0 and self.position[2] == 90) or
 ##                (self.position[1] == 9 and self.position[2] == 270))
 
+    def insideWall(self) -> bool:
+        "Determines if fish is inside the wall"
+
+        if (self.position[0] <= -1 or self.position[0] >= 10 or
+            self.position[1] <= -1 or self.position[1] >= 10):
+            print("inside a wall")
+            return True
+        else:
+            print("not inside a wall")
+            return False
+
     def sameNextPosition(self, position: list, all_coordinates: list) -> bool:
         "Returns True if two fish are moving to the same position"
 
         print("position list in samenextposition:", position)
         print("all coordinates in same next pos:", all_coordinates)
+
+        if self.fish_id == 0:
+            return False
+        elif self.fish_id == 1:
+            return (position[:2] == all_coordinates[0][:2])
+        elif self.fish_id == 2:
+            return (position[:2] == all_coordinates[1][:2])
         
-        return (position[:2] == all_coordinates[0][:2] or position[:2] ==
-            all_coordinates[1][:2])
+##        return (position[:2] == all_coordinates[0][:2] or position[:2] ==
+##            all_coordinates[1][:2])
 
     def getThroughWallPosition(self) -> list:
         """Detecting in flee mode that fish goes through the wall,
@@ -104,8 +122,6 @@ class Fish:
             return [self.position[0], 9]
         elif self.position[1] >= 9:
             return [self.position[0], 0]
-
-        return self.position[:2]
 
     def setPosition(self, position: list) -> list:
         "Saving the new position as self.position"

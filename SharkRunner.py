@@ -99,15 +99,19 @@ def moveFish():
         fleemode.append(fishes[i].getFleeMode(all_coordinates[3]))
         all_coordinates[i] = fishes[i].getNextPosition(all_coordinates[:])
 
+    print("original flee mode list", fleemode)
     # Connect fleemode fish movements with the graphics
     shark_GUI.setFleeMode(fleemode)
     shark_GUI.setCoordinates(all_coordinates[:3])
 
     for i in range(3):
-        if fishes[i].getThroughWallPosition():
+        if fishes[i].insideWall():
             fishes[i].setPosition(fishes[i].getThroughWallPosition())
             fleemode[i] = fishes[i].getFleeMode(all_coordinates[3])
+            print("agh")
 
+    print("updated flee mode list", fleemode)
+    
     # Reset the fleemode list
     shark_GUI.setFleeMode(fleemode)
                 
