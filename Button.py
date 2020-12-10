@@ -42,10 +42,12 @@ class Button:
 
     def setSelectedOutline(self):
         self.rect.setOutline(self.selected_outline)
+        self.label.setTextColor("#FFFFFF")
         return self
 
     def setDeselectedOutline(self):
         self.rect.setOutline(self.deselected_outline)
+        self.label.setTextColor("#B1E5FC")
         return self
 
 
