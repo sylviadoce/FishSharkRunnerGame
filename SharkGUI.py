@@ -71,7 +71,7 @@ class SharkGUI:
     def disableEntry(self):
         for entry in self.entries:
             entry.entry.config(state=tk.DISABLED, highlightcolor="#B1E5FC")
-        self.start_button.deactivate()
+        self.start_button.deactivate().setSelectedOutline()
         self.move_button.activate()
 
     def getCoordinates(self) -> list:

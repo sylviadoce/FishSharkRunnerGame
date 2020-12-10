@@ -15,8 +15,10 @@ class Button:
             Point(center.getX() + width / 2, center.getY() + height / 2))
         self.enabled_background = "#1AB0D3"
         self.disabled_background = "#5098B4"
+        self.selected_outline = "#FFFFFF"
+        self.deselected_outline = "#B1E5FC"
         self.rect.setFill(self.enabled_background)
-        self.rect.setOutline("#B1E5FC")
+        self.rect.setOutline(self.deselected_outline)
         self.rect.setWidth(3)
         self.label = Text(center, label_text)
         self.label.setTextColor("#B1E5FC")
@@ -37,6 +39,15 @@ class Button:
         self.active = False
         self.setFill(self.disabled_background)
         return self
+
+    def setSelectedOutline(self):
+        self.rect.setOutline(self.selected_outline)
+        return self
+
+    def setDeselectedOutline(self):
+        self.rect.setOutline(self.deselected_outline)
+        return self
+
 
     def getLabel(self) -> str:
         """Get button label"""
