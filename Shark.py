@@ -22,16 +22,19 @@ class Shark:
         distances = []
         for pos in fish_pos:
             distances.append(math.dist(pos[:2], self.position[:2]))
+        print("fish distances", distances)
 
         if ((sorted(distances)[0] == sorted(distances)[1] and
              0 <= self.following_fish <= 1) or
             (sorted(distances)[0] == sorted(distances)[2])
                 and self.following_fish > 0):
             closest_fish = fish_pos[self.following_fish]
+            print("shark continue following fish", self.following_fish)
         else:
             shuffle(distances)
             self.following_fish = distances.index(min(distances))
             closest_fish = fish_pos[self.following_fish]
+            print("shark switch following fish", self.following_fish)
         fish_distance = math.dist(closest_fish[:2], self.position[:2])
         if fish_distance > 0.4:
             self.position = [self.position[0] + round(
@@ -42,7 +45,7 @@ class Shark:
                         min(self.max_distance, fish_distance) * (
                             (closest_fish[1] - self.position[1])
                             / fish_distance))]
-        print("shark follow", self.following_fish, "dist", fish_distance)
+        print("shark going to", self.following_fish, "dist", fish_distance)
         return self.position
 
 
