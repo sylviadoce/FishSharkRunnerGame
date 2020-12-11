@@ -136,13 +136,15 @@ class Fish:
         print("shark init pos:", shark_pos)
         print("fish position:", self.position)
         
-        return (abs((shark_pos[0] - self.position[0]) <= 3) and
-                abs((shark_pos[1] - self.position[1])) <= 3)
+        return ((abs(shark_pos[0] - self.position[0]) <= 3) and
+                (abs(shark_pos[1] - self.position[1]) <= 3))
 
     def getFleeModeNextPosition(self, all_coordinates: list) -> list:
         "Determines fish's next position based on shark's angle in flee mode"
 
         print("moving flee mode")
+        print("self position before calc shark angle:", self.position)
+        print("shark pos before calc shark angle:", all_coordinates[2])
         
         # Finds angle btwn fish/shark, convert to degrees, [0,360) interval
         shark_direction = math.degrees(
