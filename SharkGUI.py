@@ -143,15 +143,16 @@ class SharkGUI:
     def spriteRotate(self, index: int, abs_rotation_degrees: int):
         abs_rotation_degrees %= 360
         self.rotations[index] = abs_rotation_degrees
-        if 90 <= abs_rotation_degrees <= 270:
-            self.sprites[index].img = PIL.ImageTk.PhotoImage(
-                self.images[index].rotate(
-                    -abs_rotation_degrees, expand=True).
-                transpose(PIL.Image.FLIP_TOP_BOTTOM))
-        else:
-            self.sprites[index].img = PIL.ImageTk.PhotoImage(
-                self.images[index].rotate(
-                    abs_rotation_degrees, expand=True))
+        if self.images[index]:
+            if 90 <= abs_rotation_degrees <= 270:
+                self.sprites[index].img = PIL.ImageTk.PhotoImage(
+                    self.images[index].rotate(
+                        -abs_rotation_degrees, expand=True).
+                    transpose(PIL.Image.FLIP_TOP_BOTTOM))
+            else:
+                self.sprites[index].img = PIL.ImageTk.PhotoImage(
+                    self.images[index].rotate(
+                        abs_rotation_degrees, expand=True))
 
         self.sprites[index].undraw()
         self.sprites[index].draw(self.win)
@@ -221,23 +222,26 @@ class SharkGUI:
     def animationComplete(self) -> bool:
         return all(self.animation_status)
 
-    def setFleeMode(self, in_flee_mode: list, delay: int = 0):
+    def setFleeMode(self, in_flee_mode: list, delay: float = 0):
         if delay:
-            self.win.after(delay*1000, self.setFleeMode, in_flee_mode)
+            self.win.after(int(delay*1000), self.setFleeMode, in_flee_mode)
+            return
         for i in range(len(in_flee_mode)):
-            if in_flee_mode[i]:
-                self.images[i] = self.flee_images[i]
-            else:
-                self.images[i] = self.regular_images[i]
-            self.spriteRotate(i, self.rotations[i])
+            if self.images[i]:
+                if in_flee_mode[i]:
+                    self.images[i] = self.flee_images[i]
+                else:
+                    self.images[i] = self.regular_images[i]
+                self.spriteRotate(i, self.rotations[i])
 
     def setDead(self, is_dead: list):
-        self.win.after(2020, self._callbackSetDead, is_dead)
+        self.win.after(1800, self._callbackSetDead, is_dead)
 
     def _callbackSetDead(self, is_dead: list):
         for i in range(len(is_dead)):
             if is_dead[i]:
                 self.sprites[i].undraw()
+                self.images[i] = None
                 self.spriteMoveTo(i, [-10, -10])
 
     def checkThroughMovement(self, i: int, next_pos: list,
@@ -290,6 +294,9 @@ class SharkGUI:
               self.animation_status)
         return 0
 
+    def disableButtons(self):
+        self.move_button.deactivate().setDeselectedOutline()
+        self.quit_button.activate().setSelectedOutline()
 
 
 if __name__ == "__main__":
