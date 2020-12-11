@@ -8,138 +8,141 @@ from Fish import Fish
 from Shark import Shark
 from SharkGUI import SharkGUI  
 
-# Create the shark graphics window
-shark_GUI = SharkGUI()
+class SharkRunner:
 
-# Create 1 shark
-shark = Shark()
+    def __init__(self):
+        "rgluhhsdsfj"
+        
+        # Create the shark graphics window
+        self.shark_GUI = SharkGUI()
 
-# Create an empty list to store fish objects
-fishes = []
+        # Create 1 shark
+        self.shark = Shark()
 
-# Set stalemate position to False
-stalemate = False
+        # Create an empty list to store fish objects
+        self.fishes = []
 
-#
-all_coordinates = [[], [], [], [7,2]]
+        #
+        self.all_coordinates = [[], [], [], [7,2]]
 
-def main():
+    def main(self):
 
-    while fishAlive and not stalemate:
-        action = shark_GUI.handleMouse()
-        if action == 1:
-            # Call start function
-            start()
-        elif action == 2:
-            # Call moveFish function
-            moveFish()
-        elif action == 3:
-            # Call Shark function
-            moveShark()
+        while self.checkFishAlive() and not self.shark.getStalemate():
+            action = self.shark_GUI.handleMouse()
+            if action == 1:
+                # Call start function
+                self.start()
+            elif action == 2:
+                # Call moveFish function
+                self.moveFish()
+            elif action == 3:
+                # Call Shark function
+                self.moveShark()
 
-def fishAlive():
-    return not(fishes[0].isDead() and fishes[1].isDead() and fishes[2].isDead())
+    def checkFishAlive(self):
+        if self.fishes:
+            return not(self.fishes[0].isDead() and self.fishes[1].isDead()
+                       and self.fishes[2].isDead())
+        return True
 
-def start():
+    def start(self):
 
-    fish_coordinates = shark_GUI.getCoordinates()
+        fish_coordinates = self.shark_GUI.getCoordinates()
 
-    # Go through each coordinate in the list of coordinates
-    for coordinates in fish_coordinates:
-        # Check that the length of each fish list is 2
-        if len(coordinates) != 2:
-            shark_GUI.displayMessage("Uh oh! Your coordinates should be 2 numbers.")
-            
-            return
-
-        # Make sure fish isn't on (7,2) <- shark starting position
-        if coordinates == [7,2]:
-            shark_GUI.displayMessage("Uh oh! This coordinate is unavailable")
-
-            return
-
-        # Check coordinates are within the range (0,10)
-        if (not(coordinates[0] in range(0,10) and coordinates[1] in
-            range(0,10))):
-            shark_GUI.displayMessage("Uh oh! This coordinate is not in range.")
-
-            return
-
-        # Check that coordinates are not the same as other fish
-        if fish_coordinates.count(coordinates) > 2:
-            shark_GUI.displayMessage("Uh oh! This coordinate is already taken. Acceptable range is [0,9].")
-
-            return
-
-    # Coordinates are locked in
-    shark_GUI.disableEntry()
-
-    # Set all_coordinates to all fish coordinates
-    all_coordinates[:3] = fish_coordinates
-
-    # Add all fish coordinates to a list fish
-    for i in range(0,3):
-        fishes.append(Fish(i, fish_coordinates[i]))
-        fish_coordinates[i][2] = fishes[i].getDirection()
-        print("direction of current fish", fish_coordinates[i])
-
-    # Show fish on board
-    shark_GUI.jumpToCoordinates(fish_coordinates)
-    
-    # Prompt the player to click the Move button
-    shark_GUI.displayMessage("Click the move button to begin!")
-
-def moveFish():
-
-    # Create empty lists for fleemode and position coordinates
-    fleemode = []
-
-    # Go through the fish coordinates list and append fleemode and position
-    for i in range(3):
-        fleemode.append(fishes[i].getFleeMode(all_coordinates[3]))
-        all_coordinates[i] = fishes[i].getNextPosition(all_coordinates[:])
-
-    print("original flee mode list", fleemode)
-    # Connect fleemode fish movements with the graphics
-    shark_GUI.setFleeMode(fleemode)
-    shark_GUI.setCoordinates(all_coordinates[:3])
-
-    for i in range(3):
-        if fishes[i].insideWall():
-            fishes[i].setPosition(fishes[i].getThroughWallPosition())
-            fleemode[i] = fishes[i].getFleeMode(all_coordinates[3])
-            print("agh")
-
-    print("updated flee mode list", fleemode)
-    
-    # Reset the fleemode list
-    shark_GUI.setFleeMode(fleemode)
+        # Go through each coordinate in the list of coordinates
+        for coordinates in fish_coordinates:
+            # Check that the length of each fish list is 2
+            if len(coordinates) != 2:
+                self.shark_GUI.displayMessage("Uh oh! Your coordinates should be 2 numbers.")
                 
-def moveShark():
+                return
 
-    all_coordinates[3] = shark.getNextPosition(all_coordinates[:3])
+            # Make sure fish isn't on (7,2) <- shark starting position
+            if coordinates == [7,2]:
+                self.shark_GUI.displayMessage("Uh oh! This coordinate is unavailable")
 
-    shark_GUI.setSharkCoordinates(all_coordinates[3])
+                return
 
-    dead_fishes = []
+            # Check coordinates are within the range (0,10)
+            if (not(coordinates[0] in range(0,10) and coordinates[1] in
+                range(0,10))):
+                self.shark_GUI.displayMessage("Uh oh! This coordinate is not in range.")
 
-    # Check if fish is dead
-    for i in range(3):
-        if (all_coordinates[i][:2] == all_coordinates[3][:2]
-            or fishes[i].isDead()):
-            print("Shark should be eating fish rn")
-            fishes[i].setDead(dead_fishes)
-            dead_fishes.append(True)
-        else:
-            dead_fishes.append(False)
+                return
 
-    print("Dead fishes:", dead_fishes)
+            # Check that coordinates are not the same as other fish
+            if fish_coordinates.count(coordinates) > 2:
+                self.shark_GUI.displayMessage("Uh oh! This coordinate is already taken. Acceptable range is [0,9].")
 
-    # Let GUI keep track of dead fishes
-    shark_GUI.setDead(dead_fishes)
-    print("GUI should register fish death")
-    
-    # Check for stalemate
-    stalemate = shark.getStalemate()
+                return
 
-main()
+        # Coordinates are locked in
+        self.shark_GUI.disableEntry()
+
+        # Set all_coordinates to all fish coordinates
+        self.all_coordinates[:3] = fish_coordinates
+
+        # Add all fish coordinates to a list fish
+        for i in range(0,3):
+            self.fishes.append(Fish(i, fish_coordinates[i]))
+            fish_coordinates[i][2] = self.fishes[i].getDirection()
+            print("direction of current fish", fish_coordinates[i])
+
+        # Show fish on board
+        self.shark_GUI.jumpToCoordinates(fish_coordinates)
+        
+        # Prompt the player to click the Move button
+        self.shark_GUI.displayMessage("Click the move button to begin!")
+
+    def moveFish(self):
+
+        # Create empty lists for fleemode and position coordinates
+        fleemode = []
+
+        # Go through the fish coordinates list and append fleemode and position
+        for i in range(3):
+            fleemode.append(self.fishes[i].getFleeMode(self.all_coordinates[3]))
+            self.all_coordinates[i] = self.fishes[i].getNextPosition(self.all_coordinates[:])
+
+        print("original flee mode list", fleemode)
+        # Connect fleemode fish movements with the graphics
+        self.shark_GUI.setFleeMode(fleemode)
+        self.shark_GUI.setCoordinates(self.all_coordinates[:3])
+
+        for i in range(3):
+            if self.fishes[i].insideWall():
+                self.all_coordinates[i] = self.fishes[i].setPosition(
+                    self.fishes[i].getThroughWallPosition())
+                fleemode[i] = False
+                print("agh")
+
+        print("updated flee mode list", fleemode)
+        
+        # Reset the fleemode list
+        self.shark_GUI.setFleeMode(fleemode, 3.5)
+                    
+    def moveShark(self):
+
+        self.all_coordinates[3] = self.shark.getNextPosition(self.all_coordinates[:3])
+
+        self.shark_GUI.setSharkCoordinates(self.all_coordinates[3])
+
+        dead_fishes = []
+
+        # Check if fish is dead
+        for i in range(3):
+            if (self.all_coordinates[i][:2] == self.all_coordinates[3][:2]
+                or self.fishes[i].isDead()):
+                print("Shark should be eating fish rn")
+                self.fishes[i].setDead(dead_fishes)
+                dead_fishes.append(True)
+            else:
+                dead_fishes.append(False)
+
+        print("Dead fishes:", dead_fishes)
+
+        # Let GUI keep track of dead fishes
+        self.shark_GUI.setDead(dead_fishes)
+        print("GUI should register fish death")
+
+SharkRunner().main()

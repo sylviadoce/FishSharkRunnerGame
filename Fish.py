@@ -87,21 +87,22 @@ class Fish:
         if self.fish_id == 0:
             return False
         elif self.fish_id == 1:
-            return (position[:2] == all_coordinates[0][:2])
+            return position[:2] == all_coordinates[0][:2]
         elif self.fish_id == 2:
-            return (position[:2] == all_coordinates[1][:2])
+            return (position[:2] == all_coordinates[1][:2] or
+                    position[:2] == all_coordinates[0][:2])
 
     def getThroughWallPosition(self) -> list:
         """Detecting in flee mode that fish goes through the wall,
             returns new position""" 
 
-        if self.position[0] <= 0:
+        if self.position[0] <= 0 and self.position[2] == 180:
             return [9, self.position[1]]
-        elif self.position[0] >= 9:
+        elif self.position[0] >= 9 and self.position[2] == 0:
             return [0, self.position[1]]
-        elif self.position[1] <= 0:
+        elif self.position[1] <= 0 and self.position[2] == 90:
             return [self.position[0], 9]
-        elif self.position[1] >= 9:
+        elif self.position[1] >= 9 and self.position[2] == 270:
             return [self.position[0], 0]
 
     def setPosition(self, position: list) -> list:
@@ -128,20 +129,20 @@ class Fish:
         
         # Finds angle btwn fish/shark, convert to degrees, [0,360) interval
         shark_direction = math.degrees(
-            math.atan2(math.radians(self.position[1] - all_coordinates[2][1]),
-                       math.radians(self.position[0] - all_coordinates[2][0]))) % 360
+            -math.atan2((self.position[1] - all_coordinates[2][1]),
+                        (self.position[0] - all_coordinates[2][0]))) % 360
 
         print("in getFleeModeNextPos, shark angle to fish:", shark_direction)
         
         # Checks if angle is 0, 90, 180, 270 (straight)
         if shark_direction % 90 == 0:
             # Set fish's new direction to opposite
-            self.position[2] = (shark_direction) % 360
+            self.position[2] = shark_direction % 360
             
         # Checks if angle is 45, 135, 225, 315(diagonal)
             # Fish has to choose randomly btwn the 2 farthest directions
         elif (shark_direction - 45) % 90 == 0:
-            self.position[2] = (shark_direction)
+            self.position[2] = shark_direction
             choice = random.choice([-45, 45])
             self.position[2] += choice
             self.position[2] %= 360
