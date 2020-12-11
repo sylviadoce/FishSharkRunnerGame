@@ -11,7 +11,8 @@ from SharkGUI import SharkGUI
 class SharkRunner:
 
     def __init__(self):
-        "rgluhhsdsfj"
+        """Defining variables with self to access other classes
+            and initialize fish and shark lists of coordinates"""
         
         # Create the shark graphics window
         self.shark_GUI = SharkGUI()
@@ -39,6 +40,14 @@ class SharkRunner:
                 # Call Shark function
                 self.moveShark()
 
+        self.shark_GUI.disableButtons()
+        self.shark_GUI.displayMessage("Game Over!\nClick Quit to exit.")
+
+
+        # Takes care of quit
+        while True:
+            self.shark_GUI.handleMouse()
+
     def checkFishAlive(self):
         if self.fishes:
             return not(self.fishes[0].isDead() and self.fishes[1].isDead()
@@ -53,26 +62,26 @@ class SharkRunner:
         for coordinates in fish_coordinates:
             # Check that the length of each fish list is 2
             if len(coordinates) != 2:
-                self.shark_GUI.displayMessage("Uh oh! Your coordinates should be 2 numbers.")
+                self.shark_GUI.displayMessage("Uh oh! Your coordinates\nshould be 2 numbers.")
                 
                 return
 
             # Make sure fish isn't on (7,2) <- shark starting position
             if coordinates == [7,2]:
-                self.shark_GUI.displayMessage("Uh oh! This coordinate is unavailable")
+                self.shark_GUI.displayMessage("Uh oh! This coordinate\nis unavailable")
 
                 return
 
             # Check coordinates are within the range (0,10)
             if (not(coordinates[0] in range(0,10) and coordinates[1] in
                 range(0,10))):
-                self.shark_GUI.displayMessage("Uh oh! This coordinate is not in range.")
+                self.shark_GUI.displayMessage("Uh oh! This coordinate\nis not in range.")
 
                 return
 
             # Check that coordinates are not the same as other fish
             if fish_coordinates.count(coordinates) > 2:
-                self.shark_GUI.displayMessage("Uh oh! This coordinate is already taken. Acceptable range is [0,9].")
+                self.shark_GUI.displayMessage("Uh oh! This coordinate\nis already taken. Acceptable range is [0,9].")
 
                 return
 
@@ -92,7 +101,7 @@ class SharkRunner:
         self.shark_GUI.jumpToCoordinates(fish_coordinates)
         
         # Prompt the player to click the Move button
-        self.shark_GUI.displayMessage("Click the move button to begin!")
+        self.shark_GUI.displayMessage("Click the Move\nbutton to begin!")
 
     def moveFish(self):
 
@@ -131,9 +140,15 @@ class SharkRunner:
 
         # Check if fish is dead
         for i in range(3):
+            if self.all_coordinates[i][:2] == self.all_coordinates[3][:2]:
+                if i == 0:
+                    self.shark_GUI.displayMessage("Oh no!Orange fish\nhas died. Click the\nMove button to continue")
+                elif i == 1:
+                    self.shark_GUI.displayMessage("Oh no!\nPurple fish\nhas died. Click the\nMove button to continue")
+                elif i == 2:
+                    self.shark_GUI.displayMessage("Oh no!\nYellow fish\nhas died. Click the\nMove button to continue")
             if (self.all_coordinates[i][:2] == self.all_coordinates[3][:2]
                 or self.fishes[i].isDead()):
-                print("Shark should be eating fish rn")
                 self.fishes[i].setDead(dead_fishes)
                 dead_fishes.append(True)
             else:
