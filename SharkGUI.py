@@ -13,7 +13,7 @@ class SharkGUI:
         self.animation_fps = 10
         self.animation_status = [True] * 8
         try:
-            self.win
+            self.win.delete("all")
         except AttributeError:
             self.win = GraphWin("Water World", 1200, 800, False)
         self.background = Image(Point(600, 399),
