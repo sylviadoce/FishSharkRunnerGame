@@ -1,4 +1,7 @@
 # Shark Game GUI Handler (Benjamin Antupit)
+# Background Water texture found at
+# https://2minutetabletop.com/product/ocean-water-textures/
+# All other graphics were created by Benjamin & Sylvia
 
 from Button import Button
 from graphics import GraphWin, tk, Image, Point, Entry, Text
@@ -77,18 +80,17 @@ class SharkGUI:
 
     def getCoordinates(self) -> list:
         entries = ["", "", ""]
-        try:
-            for i in range(3):
-                entries[i] = "".join(list(filter(
-                    '0123456789,'.__contains__, self.entries[i].getText())
-                                          )).split(",", 1)
+        for i in range(3):
+            entries[i] = "".join(list(filter(
+                '0123456789,'.__contains__, self.entries[i].getText())
+                                      )).split(",", 1)
+            try:
                 for j in range(len(entries[i])):
                     entries[i][j] = int(entries[i][j].strip(","))
-            print(entries)
-        except ValueError:
-            return [[], [], []]
-        else:
-            return entries
+            except ValueError:
+                entries[i] = ""
+        print(entries)
+        return entries
 
     def displayMessage(self, string, callback_time=0):
         if callback_time:
