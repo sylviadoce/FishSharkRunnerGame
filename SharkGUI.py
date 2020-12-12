@@ -12,10 +12,7 @@ class SharkGUI:
     def __init__(self):
         self.animation_fps = 10
         self.animation_status = [True] * 8
-        try:
-            self.win.delete("all")
-        except AttributeError:
-            self.win = GraphWin("Water World", 1200, 800, False)
+        self.win = GraphWin("Water World", 1200, 800, False)
         self.background = Image(Point(600, 399),
                                 "gui/fish-grid-01.png").draw(self.win)
         self.entries = [Entry(Point(308, 190), 8),
@@ -32,7 +29,8 @@ class SharkGUI:
                                disabledbackground="#5098B4",
                                disabledforeground="#B1E5FC")
 
-        self.start_button = Button(Point(215, 430), 316, 48, "Start")
+        self.start_button = Button(Point(215, 430),
+                                   316, 48, "Start").setSelectedOutline()
         self.move_button = Button(Point(212, 664),
                                   316, 48, "Move Fish").deactivate()
         self.is_shark_move = False
@@ -74,7 +72,7 @@ class SharkGUI:
     def disableEntry(self):
         for entry in self.entries:
             entry.entry.config(state=tk.DISABLED, highlightcolor="#B1E5FC")
-        self.start_button.deactivate()
+        self.start_button.deactivate().setDeselectedOutline()
         self.move_button.activate().setSelectedOutline()
 
     def getCoordinates(self) -> list:
@@ -92,8 +90,14 @@ class SharkGUI:
         else:
             return entries
 
-    def displayMessage(self, string):
-        self.message.setText(string)
+    def displayMessage(self, string, callback_time=0):
+        if callback_time:
+            self.win.after(int(callback_time * 1000),
+                           self.displayMessage, string)
+            print("callback scheduled for display message",
+                  callback_time, string)
+        else:
+            self.message.setText(string)
 
     def getStartPressed(self, point) -> bool:
         if self.start_button.clicked(point):
@@ -228,6 +232,7 @@ class SharkGUI:
     def setFleeMode(self, in_flee_mode: list, delay: float = 0):
         if delay:
             self.win.after(int(delay*1000), self.setFleeMode, in_flee_mode)
+            print("callback on setFleeMode", delay, in_flee_mode)
             return
         for i in range(len(in_flee_mode)):
             if self.images[i]:
@@ -298,9 +303,12 @@ class SharkGUI:
         return 0
 
     def disableButtons(self):
-        self.move_button.deactivate().setDeselectedOutline()
-        self.quit_button.activate().setSelectedOutline()
+        self.move_button.setLabel("Try Again")
+        self.quit_button.activate().setDeselectedOutline()
         self.message.setTextColor("#FFFFFF")
+
+    def close(self):
+        self.win.close()
 
 
 if __name__ == "__main__":
