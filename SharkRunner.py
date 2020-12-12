@@ -2,7 +2,6 @@
 #
 # Shark Runner
 
-from Button import Button
 from Fish import Fish
 from Shark import Shark
 from SharkGUI import SharkGUI  
@@ -50,8 +49,8 @@ class SharkRunner:
                 if not self.fishes[i].isDead():
                     message.append(["orange", "purple", "yellow"][i])
             message[0] = message[0].capitalize()
-            self.shark_GUI.displayMessage("Game Over!\n", ", ".join(message),
-                                          "fishes win.\nClick Quit to exit.\nClick Start to try again.")
+            self.shark_GUI.displayMessage("Game Over!" + ", ".join(message) +
+                                          " fishes win.\nClick Quit to exit.\nClick Start to try again.")
 
 ##        # Takes care of quit
 ##        while True:
@@ -68,8 +67,8 @@ class SharkRunner:
 
         self.shark_GUI.__init__()
         
-        self.shark_GUI.displayMessage("Game Over!\n", ", ".join(message),
-                                      "fishes win.\nClick Quit to exit.\nClick Start to try again.")
+        self.shark_GUI.displayMessage("Game Over!" + ", ".join(message) +
+                                          " fishes win.\nClick Quit to exit.\nClick Start to try again.")
         self.main()
 
     def checkFishAlive(self):
