@@ -297,6 +297,7 @@ class SharkGUI:
     def disableButtons(self):
         self.move_button.deactivate().setDeselectedOutline()
         self.quit_button.activate().setSelectedOutline()
+        self.message.setTextColor("#FFFFFF")
 
 
 if __name__ == "__main__":

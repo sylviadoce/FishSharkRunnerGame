@@ -36,8 +36,10 @@ class Shark:
               min(distances), distances.index(min(distances)))
 
         if ((sorted(distances)[0] == sorted(distances)[1] and
-             0 <= self.following_fish <= 1) or
-            (sorted(distances)[0] == sorted(distances)[2])
+             0 <= sorted(distances).index(
+                    distances[self.following_fish]) <= 1) or
+            (sorted(distances)[0] == sorted(distances)[1]
+                == sorted(distances)[2])
                 and self.following_fish > 0):
             closest_fish = fish_pos[self.following_fish]
             print("shark continue following fish", self.following_fish)
