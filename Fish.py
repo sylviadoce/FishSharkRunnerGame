@@ -9,8 +9,9 @@ import math
 class Fish:
 
     def __init__(self, fish_id, init_pos: list):
-        """Sets the fish position to a list of x-coord, y-coord, and
-            a randomized direction NESW"""
+        """Initializes the fish's position (a list of x-coord, y-coord,
+            its id, its state of death (False) and a randomized
+            direction NESW)"""
 
         self.position = init_pos
         self.fish_id = fish_id
@@ -18,8 +19,9 @@ class Fish:
         self.position.append((random.randrange(0,3))*90)
 
     def getNextPosition(self, all_coordinates: list) -> list:
-        """Gets the fishes' next positions based on each others' locations,
-            considering flee mode"""
+        """Gets the fishes' next positions based on if it's alive,
+            if it's in flee mode, if it's facing a wall, and if it's on
+            another's location"""
 
         print("NEXT FISH POSITION")
 
@@ -29,37 +31,44 @@ class Fish:
         # Check if fish is dead and move off the grid
         if self.dead:
             return [-10,-10]
+        # Check for flee mode relative to shark's position
         if self.getFleeMode(all_coordinates[2]):
+            # Special get next position method
             return self.getFleeModeNextPosition(all_coordinates)
+        # Turn the fish around if facing a wall
         if self.facingWall():
             self.position[2] += 180
             self.position[2] %= 360
+        # Compare the all fishes' and shark's next positions
         if self.sameNextPosition(self.getXY(), all_coordinates):
-            print("same next pos")
             return self.position
 
+        # New position is the calculated next position
         self.position[:2] = self.getXY() 
         
         return self.position[:2]
 
     def getXY(self) -> list:
-        "Gets next move along x or y axis"
+        "Gets fish's next move along the x or y-axis"
 
         print("in getXY, OG fish direction:", self.position[2])
         print("in getXY, OG positions:", self.position[0], self.position[1])
         print("in getXY, OG direction:", self.position[2])
-        
-        return [self.position[0] + round(math.cos(math.radians(self.position[2]))),
-                self.position[1] - round(math.sin(math.radians(self.position[2])))]
 
+        # Use trig on the fish's direction to determine movement
+            # Because of python coordinate system, subtract y movement
+        return [self.position[0] +
+                round(math.cos(math.radians(self.position[2]))),
+                self.position[1] -
+                round(math.sin(math.radians(self.position[2])))]
 
     def getDirection(self) -> int:
-        "Gets the direction z from the list x, y, z of self"
+        "Gets the direction z from the list x, y, z of fish"
 
         return self.position[2]
 
     def facingWall(self) -> bool:
-        "Determines if fish is about to go into wall"
+        "Determines if fish is about to go into wall - on it and facing it"
 
         if ((self.position[0] <= 0 and self.position[2] == 180) or
                 (self.position[0] >= 9 and self.position[2] == 0) or
@@ -79,7 +88,8 @@ class Fish:
             return False
 
     def sameNextPosition(self, position: list, all_coordinates: list) -> bool:
-        "Returns True if two fish are moving to the same position"
+        """Returns True if two fish are moving to the same position, starting
+            with the first fish"""
 
         print("in sameNextPos, position:", position)
         print("in sameNextPos, all coordinates:", all_coordinates)
@@ -106,7 +116,7 @@ class Fish:
             return [self.position[0], 0]
 
     def setPosition(self, position: list) -> list:
-        "Saving the new position as self.position"
+        "Sets the new position to self.position"
         
         self.position[:2] = position[:2]
         
@@ -115,19 +125,14 @@ class Fish:
     def getFleeMode(self, shark_pos: list) -> bool:
         "Returns True if the shark is 3 or less spaces away from a fish"
 
-        print("in getFleeMode, shark init pos:", shark_pos)
-        print("in getFleeMode, fish init pos:", self.position)
-        
         return ((abs(shark_pos[0] - self.position[0]) <= 3) and
                 (abs(shark_pos[1] - self.position[1]) <= 3))
 
     def getFleeModeNextPosition(self, all_coordinates: list) -> list:
         "Determines fish's next position based on shark's angle in flee mode"
 
-        print("in getFleeModeNextPos, self position before calc shark angle:", self.position)
-        print("in getFleeModeNextPos, shark pos before calc shark angle:", all_coordinates[2])
-        
-        # Finds angle btwn fish/shark, convert to degrees, [0,360) interval
+        # Finds directional angle btwn fish/shark, convert to
+            # degrees, [0,360) interval
         shark_direction = math.degrees(
             -math.atan2((self.position[1] - all_coordinates[2][1]),
                         (self.position[0] - all_coordinates[2][0]))) % 360
@@ -147,6 +152,7 @@ class Fish:
             self.position[2] += choice
             self.position[2] %= 360
 
+            # If the chosen direction's position is taken, choose the other
             if self.sameNextPosition(self.getXY(), all_coordinates):
                 if choice == -45:
                     self.position[2] += 90
@@ -158,26 +164,29 @@ class Fish:
             # Divide by 90, round to nearest int, multiply by 90
             self.position[2] = (round(shark_direction/90) * 90) % 360
 
-        # Check if facing wall, exclude direction, of next position
+        # Check if next position is facing wall, if so go through wall 
         check_position = self.getXY()
         if self.facingWall():
             check_position = self.getThroughWallPosition()
 
-        # Check if on another fish
+        # Check if next position (other option) is taken, if so don't move 
         if self.sameNextPosition(check_position, all_coordinates):
             return self.position
         else:
             self.position[:2] = self.getXY()
-            # fish has another option
             return self.position[:2]
 
     def setDead(self, dead):
-        "Defining death"
+        "Sets fish status to dead"
         
         self.dead = dead
 
     def getPosition(self):
+        "Get the next position: x, y, z"
+        
         return self.position
 
     def isDead(self):
+        "Checks if fish status is dead"
+        
         return self.dead
