@@ -11,8 +11,18 @@ class Shark:
         self.position = [7, 2, 0]
         self.max_distance = 2.49  # Max direct distance
         self.following_fish = -1
+        self.previous_moves = [[], []]
 
     def getStalemate(self):
+        if len(self.previous_moves[0]) >= 8:  # 8 moves have transpired
+            print("shark x count", self.previous_moves[0].count(
+                self.previous_moves[0][0]))
+            print("shark y count", self.previous_moves[1].count(
+                self.previous_moves[1][0]))
+            return (self.previous_moves[0].count(
+                self.previous_moves[0][0]) == len(self.previous_moves[0])
+                    or self.previous_moves[1].count(
+                self.previous_moves[1][0]) == len(self.previous_moves[1]))
         return False
 
     def getPosition(self):
@@ -58,6 +68,13 @@ class Shark:
             print("shark post off axis", delta_position, self.position)
 
         print("shark going to", self.following_fish, "dist", fish_distance)
+
+        self.previous_moves[0].append(self.position[:2][0])
+        self.previous_moves[1].append(self.position[:2][1])
+        if len(self.previous_moves[0]) > 8:  # 8 moves have transpired
+            self.previous_moves[0].pop(0)
+            self.previous_moves[1].pop(0)
+        print("shark previous moves", self.previous_moves)
         return self.position
 
 
