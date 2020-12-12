@@ -66,7 +66,7 @@ class SharkRunner:
         for coordinates in fish_coordinates:
             # Check that the length of each fish list is 2
             if len(coordinates) != 2:
-                self.shark_GUI.displayMessage("Uh oh! Your coordinates\nshould be 2 numbers.")
+                self.shark_GUI.displayMessage("Uh oh! Your coordinates\nshould be 2 numbers\nseparated by a comma.")
                 
                 return
 
@@ -79,7 +79,7 @@ class SharkRunner:
             # Check coordinates are within the range (0,10)
             if (not(coordinates[0] in range(0,10) and coordinates[1] in
                 range(0,10))):
-                self.shark_GUI.displayMessage("Uh oh! One coordinate\nis not in range.")
+                self.shark_GUI.displayMessage("Uh oh! One coordinate\nis not in range.\nAcceptable range is [0,9].")
 
                 return
 
