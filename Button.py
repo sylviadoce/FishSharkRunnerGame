@@ -1,7 +1,7 @@
 # Button class: Displays a customizable and toggle-able button
 # Benjamin Antupit
 
-from graphics import Rectangle, Point, Text, GraphWin
+from graphics import Rectangle, Point, Text
 
 
 class Button:
@@ -49,7 +49,6 @@ class Button:
         self.rect.setOutline(self.deselected_outline)
         self.label.setTextColor("#B1E5FC")
         return self
-
 
     def getLabel(self) -> str:
         """Get button label"""

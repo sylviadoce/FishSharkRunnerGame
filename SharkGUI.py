@@ -12,7 +12,10 @@ class SharkGUI:
     def __init__(self):
         self.animation_fps = 10
         self.animation_status = [True] * 8
-        self.win = GraphWin("Water World", 1200, 800, False)
+        try:
+            self.win
+        except NameError:
+            self.win = GraphWin("Water World", 1200, 800, False)
         self.background = Image(Point(600, 399),
                                 "gui/fish-grid-01.png").draw(self.win)
         self.entries = [Entry(Point(308, 190), 8),
@@ -279,7 +282,7 @@ class SharkGUI:
         if self.start_button.clicked(point):
             print("start")
             return 1
-        if self.move_button.clicked(point): # and self.animationComplete():
+        if self.move_button.clicked(point):  # and self.animationComplete()
             if self.is_shark_move:
                 self.is_shark_move = False
                 self.move_button.setLabel("Move Fish")
