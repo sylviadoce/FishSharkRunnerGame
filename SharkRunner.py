@@ -34,6 +34,7 @@ class SharkRunner:
                 # Call start function
                 self.start()
             elif action == 2:
+                self.shark_GUI.displayMessage("Click the Move\nbutton to continue!")
                 # Call moveFish function
                 self.moveFish()
             elif action == 3:
