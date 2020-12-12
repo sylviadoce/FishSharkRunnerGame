@@ -2,7 +2,7 @@
 #
 # Fish class takes care of fish movement, coordinates, "flee" mode,
     # and death
-#
+
 import random
 import math
 

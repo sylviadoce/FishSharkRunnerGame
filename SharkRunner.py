@@ -1,7 +1,6 @@
 # Sylvia Chin
 #
 # Shark Runner
-#
 
 from Button import Button
 from Fish import Fish
