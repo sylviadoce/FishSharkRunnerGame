@@ -40,17 +40,37 @@ class SharkRunner:
                 # Call Shark function
                 self.moveShark()
 
+        message = []
         self.shark_GUI.disableButtons()
 
         if not self.checkFishAlive():
             self.shark_GUI.displayMessage("Game Over!\n Shark wins.\nClick Quit to exit.")
         else:
-            self.shark_GUI.displayMessage("Game Over!\n Fishes win.\nClick Quit to exit.")
+            for i in range(3):
+                if not self.fishes[i].isDead():
+                    message.append(["orange", "purple", "yellow"][i])
+            message[0] = message[0].capitalize()
+            self.shark_GUI.displayMessage("Game Over!\n", ", ".join(message),
+                                          "fishes win.\nClick Quit to exit.\nClick Start to try again.")
 
+##        # Takes care of quit
+##        while True:
+##            self.shark_GUI.handleMouse()
 
-        # Takes care of quit
-        while True:
-            self.shark_GUI.handleMouse()
+        # Create 1 shark
+        self.shark = Shark()
+
+        # Create an empty list to store fish objects
+        self.fishes = []
+
+        # luhliu
+        self.all_coordinates = [[], [], [], [7,2]]
+
+        self.shark_GUI.__init__()
+        
+        self.shark_GUI.displayMessage("Game Over!\n", ", ".join(message),
+                                      "fishes win.\nClick Quit to exit.\nClick Start to try again.")
+        self.main()
 
     def checkFishAlive(self):
         if self.fishes:
