@@ -14,7 +14,7 @@ class SharkGUI:
         self.animation_status = [True] * 8
         try:
             self.win
-        except NameError:
+        except AttributeError:
             self.win = GraphWin("Water World", 1200, 800, False)
         self.background = Image(Point(600, 399),
                                 "gui/fish-grid-01.png").draw(self.win)
