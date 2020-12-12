@@ -45,7 +45,7 @@ class SharkRunner:
         if not self.checkFishAlive():
             self.shark_GUI.displayMessage("Game Over!\n Shark wins.\nClick Quit to exit.")
         else:
-            self.shark_GUI.displayMessage("Game Over!\n Fish win.\nClick Quit to exit.")
+            self.shark_GUI.displayMessage("Game Over!\n Fishes win.\nClick Quit to exit.")
 
 
         # Takes care of quit
