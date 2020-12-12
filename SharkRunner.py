@@ -62,7 +62,7 @@ class SharkRunner:
         # Create an empty list to store fish objects
         self.fishes = []
 
-        # luhliu
+        # Making a list a list of each fish and the shark's coordinates
         self.all_coordinates = [[], [], [], [7,2]]
 
         self.shark_GUI.__init__()
