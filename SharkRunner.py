@@ -24,6 +24,9 @@ class SharkRunner:
         # Creates a list of lists for 3 fish and 1 shark coordinates
         self.all_coordinates = [[], [], [], [7,2]]
 
+        # List of fish names to identify errors and wins
+        self.fish_names = ["orange", "purple", "yellow"]
+
     def main(self):
         """Runs through each action (certain button clicks) to execute
             the move cycle."""
@@ -52,7 +55,7 @@ class SharkRunner:
             for i in range(3):
                 # Check which specific fish are alive to congratulate
                 if not self.fishes[i].isDead():
-                    message.append(["orange", "purple", "yellow"][i])
+                    message.append(self.fish_names[i])
             message[0] = message[0].capitalize()
             self.shark_GUI.displayMessage("Game Over!\n" + ", ".join(message) +
                                           " fish(es) win.\nClick Quit or Try Again.", 2.5)
@@ -80,63 +83,32 @@ class SharkRunner:
         fish_coordinates = self.shark_GUI.getCoordinates()
 
         # Go through each coordinate in the list of coordinates
-        for i in range(3):
+        for i in range(2,-1,-1):
+            print(fish_coordinates)
             # Check that the length of each fish list is 2
-            if (len(fish_coordinates[0]) != 2 or
-                len(fish_coordinates[1]) != 2 or
-                len(fish_coordinates[2]) != 2):
-                self.shark_GUI.displayMessage("Uh oh! Orange fish's coord-\ninates should be 2 numbers\nseparated by a comma.")
+            if len(fish_coordinates[i]) != 2:
+                self.shark_GUI.displayMessage("Uh oh! " + self.fish_names[i].capitalize() + " fish's coord-\ninates should be 2 numbers\nseparated by a comma.")
                 
                 return
 
             # Make sure fish isn't on (7,2) <- shark starting position
-            if coordinates == [7,2]:
-                self.shark_GUI.displayMessage("Uh oh! One coordinate\nis unavailable")
+            if fish_coordinates[i] == [7,2]:
+                self.shark_GUI.displayMessage("Uh oh! " + self.fish_names[i].capitalize() + " fish's coord-\ninate is on top of shark")
 
                 return
 
             # Check coordinates are within the range (0,10)
-            if (not(coordinates[0] in range(0,10) and coordinates[1] in
+            if (not(fish_coordinates[i][0] in range(0,10) and fish_coordinates[i][1] in
                 range(0,10))):
-                self.shark_GUI.displayMessage("Uh oh! One coordinate\nis not in range.\nAcceptable range is [0,9].")
+                self.shark_GUI.displayMessage("Uh oh! " + self.fish_names[i].capitalize() + " fish's coord-\ninate is not in range.\nAcceptable range is [0,9].")
 
                 return
 
             # Check that coordinates are not the same as other fish
-            if fish_coordinates.count(coordinates) >= 2:
-                self.shark_GUI.displayMessage("Uh oh! One coordinate is\nalready taken. Acceptable\nrange is [0,9].")
+            if fish_coordinates.count(fish_coordinates[i]) >= 2:
+                self.shark_GUI.displayMessage("Uh oh! " + self.fish_names[i].capitalize() + " fish's coord-\ninate is already taken.\nAcceptable range is [0,9].")
 
                 return
-
-
-
-##        # Go through each coordinate in the list of coordinates
-##        for coordinates in fish_coordinates:
-##            print(fish_coordinates)
-##            # Check that the length of each fish list is 2
-##            if len(coordinates) != 2:
-##                self.shark_GUI.displayMessage("Uh oh! Orange fish's coord-\ninates should be 2 numbers\nseparated by a comma.")
-##                
-##                return
-##
-##            # Make sure fish isn't on (7,2) <- shark starting position
-##            if coordinates == [7,2]:
-##                self.shark_GUI.displayMessage("Uh oh! One coordinate\nis unavailable")
-##
-##                return
-##
-##            # Check coordinates are within the range (0,10)
-##            if (not(coordinates[0] in range(0,10) and coordinates[1] in
-##                range(0,10))):
-##                self.shark_GUI.displayMessage("Uh oh! One coordinate\nis not in range.\nAcceptable range is [0,9].")
-##
-##                return
-##
-##            # Check that coordinates are not the same as other fish
-##            if fish_coordinates.count(coordinates) >= 2:
-##                self.shark_GUI.displayMessage("Uh oh! One coordinate is\nalready taken. Acceptable\nrange is [0,9].")
-##
-##                return
 
         # Coordinates are locked in
         self.shark_GUI.disableEntry()
