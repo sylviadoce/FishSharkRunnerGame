@@ -351,12 +351,3 @@ class SharkGUI:
     def close(self):
         """Close graphics window"""
         self.win.close()
-
-
-if __name__ == "__main__":
-    testGUI = SharkGUI()
-    testGUI.win.getMouse()
-    print(testGUI.getCoordinates())
-    testGUI.win.getMouse()
-    testGUI.disableEntry()
-    print(testGUI.getCoordinates())
