@@ -47,44 +47,22 @@ class SharkRunner:
 
         # Update the message with the proper winner
         if not self.checkFishAlive():
-            self.shark_GUI.displayMessage("Game Over! Shark wins.\nClick Quit to exit.\nClick Start to try again.")
+            self.shark_GUI.displayMessage("Game Over!\nShark wins.\nClick Quit or Try Again.", 2.5)
         else:
             for i in range(3):
                 # Check which specific fish are alive to congratulate
                 if not self.fishes[i].isDead():
                     message.append(["orange", "purple", "yellow"][i])
             message[0] = message[0].capitalize()
-            self.shark_GUI.displayMessage("Game Over! " + ", ".join(message) +
-                                          " fish(es)\nwin. Click Quit to exit.\nClick Start to try again.")
+            self.shark_GUI.displayMessage("Game Over!\n" + ", ".join(message) +
+                                          " fish(es) win.\nClick Quit or Try Again.", 2.5)
 
-        # Activates the Start button
-        self.shark_GUI.start_button.activate()
-
-        # If the Start button is clicked, close the old window and open new game
-        point = self.shark_GUI.win.getMouse()
-        if self.shark_GUI.start_button.clicked(point):
-            self.shark_GUI.win
-            self.shark_GUI.win.close()
-
-##        # Takes care of quit
-##        while True:
-##            self.shark_GUI.handleMouse()
-
-##        # Reset all variables for next round
-##        # Create 1 shark
-##        self.shark = Shark()
-##
-##        # Create an empty list to store fish objects
-##        self.fishes = []
-##
-##        # Making a list a list of each fish and the shark's coordinates
-##        self.all_coordinates = [[], [], [], [7,2]]
-##
-##        self.shark_GUI.__init__()
-##        
-##        self.shark_GUI.displayMessage("Game Over! " + ", ".join(message) +
-##                                          " fish(es)\nwin. Click Quit to exit.\nClick Start to try again.")
-##        self.main()
+        while True:
+            # Takes care of quit by detecing mouse clicks
+            action = self.shark_GUI.handleMouse()
+            if action > 0:
+                self.shark_GUI.close()
+                SharkRunner().main()
 
     def checkFishAlive(self):
         "Returns True if any fish status is alive"
@@ -102,10 +80,12 @@ class SharkRunner:
         fish_coordinates = self.shark_GUI.getCoordinates()
 
         # Go through each coordinate in the list of coordinates
-        for coordinates in fish_coordinates:
+        for i in range(3):
             # Check that the length of each fish list is 2
-            if len(coordinates) != 2:
-                self.shark_GUI.displayMessage("Uh oh! Your coordinates\nshould be 2 numbers\nseparated by a comma.")
+            if (len(fish_coordinates[0]) != 2 or
+                len(fish_coordinates[1]) != 2 or
+                len(fish_coordinates[2]) != 2):
+                self.shark_GUI.displayMessage("Uh oh! Orange fish's coord-\ninates should be 2 numbers\nseparated by a comma.")
                 
                 return
 
@@ -127,6 +107,36 @@ class SharkRunner:
                 self.shark_GUI.displayMessage("Uh oh! One coordinate is\nalready taken. Acceptable\nrange is [0,9].")
 
                 return
+
+
+
+##        # Go through each coordinate in the list of coordinates
+##        for coordinates in fish_coordinates:
+##            print(fish_coordinates)
+##            # Check that the length of each fish list is 2
+##            if len(coordinates) != 2:
+##                self.shark_GUI.displayMessage("Uh oh! Orange fish's coord-\ninates should be 2 numbers\nseparated by a comma.")
+##                
+##                return
+##
+##            # Make sure fish isn't on (7,2) <- shark starting position
+##            if coordinates == [7,2]:
+##                self.shark_GUI.displayMessage("Uh oh! One coordinate\nis unavailable")
+##
+##                return
+##
+##            # Check coordinates are within the range (0,10)
+##            if (not(coordinates[0] in range(0,10) and coordinates[1] in
+##                range(0,10))):
+##                self.shark_GUI.displayMessage("Uh oh! One coordinate\nis not in range.\nAcceptable range is [0,9].")
+##
+##                return
+##
+##            # Check that coordinates are not the same as other fish
+##            if fish_coordinates.count(coordinates) >= 2:
+##                self.shark_GUI.displayMessage("Uh oh! One coordinate is\nalready taken. Acceptable\nrange is [0,9].")
+##
+##                return
 
         # Coordinates are locked in
         self.shark_GUI.disableEntry()
@@ -190,11 +200,11 @@ class SharkRunner:
         for i in range(3):
             if self.all_coordinates[i][:2] == self.all_coordinates[3][:2]:
                 if i == 0:
-                    self.shark_GUI.displayMessage("Oh no! Orange fish\nhas died. Click the\nMove button to continue.")
+                    self.shark_GUI.displayMessage("Oh no! Orange fish\nhas died. Click the\nMove button to continue.", 1.8)
                 elif i == 1:
-                    self.shark_GUI.displayMessage("Oh no! Purple fish\nhas died. Click the\nMove button to continue.")
+                    self.shark_GUI.displayMessage("Oh no! Purple fish\nhas died. Click the\nMove button to continue.", 1.8)
                 elif i == 2:
-                    self.shark_GUI.displayMessage("Oh no! Yellow fish\nhas died. Click the\nMove button to continue.")
+                    self.shark_GUI.displayMessage("Oh no! Yellow fish\nhas died. Click the\nMove button to continue.", 1.8)
             if (self.all_coordinates[i][:2] == self.all_coordinates[3][:2]
                 or self.fishes[i].isDead()):
                 self.fishes[i].setDead(dead_fishes)
