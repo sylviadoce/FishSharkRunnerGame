@@ -19,7 +19,7 @@ class SharkGUI:
         self.animation_status = [True] * 8
         self.win = GraphWin("Water World", 1200, 800, False)
         self.background = Image(Point(600, 399),
-                                "gui/fish-grid-01.png").draw(self.win)
+                                "fish-grid.png").draw(self.win)
         self.entries = [Entry(Point(308, 190), 8),
                         Entry(Point(308, 270), 8),
                         Entry(Point(308, 350), 8)]
@@ -58,25 +58,25 @@ class SharkGUI:
         # Load all images as PIL images to allow for rotation
         # Convert to tkinter PhotoImage after rotation
         self.regular_images = [
-            PIL.Image.open("gui/orange_fish_low_res.png"),
-            PIL.Image.open("gui/purple_fish_low_res.png"),
-            PIL.Image.open("gui/yellow_fish_low_res.png"),
-            PIL.Image.open("gui/shark_low_res.png")]
-        self.flee_images = [PIL.Image.open("gui/orange_fish_flee.png"),
-                            PIL.Image.open("gui/purple_fish_flee.png"),
-                            PIL.Image.open("gui/yellow_fish_flee.png"),
-                            PIL.Image.open("gui/shark_low_res.png")]
+            PIL.Image.open("orange_fish.png"),
+            PIL.Image.open("purple_fish.png"),
+            PIL.Image.open("yellow_fish.png"),
+            PIL.Image.open("shark.png")]
+        self.flee_images = [PIL.Image.open("orange_fish_flee.png"),
+                            PIL.Image.open("purple_fish_flee.png"),
+                            PIL.Image.open("yellow_fish_flee.png"),
+                            PIL.Image.open("shark.png")]
         self.images = self.regular_images[:]
         self.sprites = [Image(Point(1300, 400),
-                              "gui/orange_fish_low_res.png")
+                              "orange_fish.png")
                         .draw(self.win),
                         Image(Point(1300, 400),
-                              "gui/yellow_fish_low_res.png")
+                              "yellow_fish.png")
                         .draw(self.win),
                         Image(Point(1300, 400),
-                              "gui/purple_fish_low_res.png")
+                              "purple_fish.png")
                         .draw(self.win),
-                        Image(Point(979, 219), "gui/shark_low_res.png")
+                        Image(Point(979, 219), "shark.png")
                         .draw(self.win)]
 
     def disableEntry(self):
@@ -350,3 +350,10 @@ class SharkGUI:
     def close(self):
         """Close graphics window"""
         self.win.close()
+
+
+if __name__ == "__main__":
+    testGUI = SharkGUI()
+    while True:
+        testGUI.handleMouse()
+        print(testGUI.getCoordinates())
