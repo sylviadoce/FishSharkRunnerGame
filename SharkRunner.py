@@ -6,6 +6,7 @@ from Fish import Fish
 from Shark import Shark
 from SharkGUI import SharkGUI  
 
+
 class SharkRunner:
 
     def __init__(self):
@@ -23,7 +24,7 @@ class SharkRunner:
         self.fishes = []
 
         # Creates a list of lists for 3 fish and 1 shark coordinates
-        self.all_coordinates = [[], [], [], [7,2]]
+        self.all_coordinates = [[], [], [], [7, 2]]
 
         # List of fish names to identify errors and wins
         self.fish_names = ["orange", "purple", "yellow"]
@@ -73,14 +74,14 @@ class SharkRunner:
                 SharkRunner().main()
 
     def checkFishAlive(self):
-        "Returns True if any fish status is alive"
+        """Returns True if any fish status is alive"""
         if self.fishes:
             return not(self.fishes[0].isDead() and self.fishes[1].isDead()
                        and self.fishes[2].isDead())
         return True
 
     def start(self):
-        """"Sets up round by checking for valid coordinates, displaying
+        """Sets up round by checking for valid coordinates, displaying
             fishes and shark on board, and deactivating/activating the
             Start and Move buttons"""
 
@@ -88,32 +89,29 @@ class SharkRunner:
         fish_coordinates = self.shark_GUI.getCoordinates()
 
         # Go through each coordinate in the list of coordinates
-        for i in range(2,-1,-1):
+        for i in range(2, -1, -1):
             # Check that the length of each fish list is 2
             if len(fish_coordinates[i]) != 2:
                 self.shark_GUI.displayMessage(
                     "Uh oh! " + self.fish_names[i].capitalize()
                     + " fish's coord-\ninates should be 2 numbers\n"
                     + "separated by a comma.")
-                
                 return
 
             # Make sure fish isn't on (7,2) <- shark starting position
-            if fish_coordinates[i] == [7,2]:
+            if fish_coordinates[i] == [7, 2]:
                 self.shark_GUI.displayMessage(
                     "Uh oh! " + self.fish_names[i].capitalize()
-                    +" fish's coord-\ninate is on top of shark")
-
+                    + " fish's coord-\ninate is on top of shark")
                 return
 
             # Check coordinates are within the range (0,10)
-            if (not(fish_coordinates[i][0] in range(0,10) and
-                    fish_coordinates[i][1] in range(0,10))):
+            if (not(fish_coordinates[i][0] in range(0, 10) and
+                    fish_coordinates[i][1] in range(0, 10))):
                 self.shark_GUI.displayMessage(
                     "Uh oh! " + self.fish_names[i].capitalize()
                     + " fish's coord-\ninate is not in range.\n"
                     "Acceptable range is [0,9].")
-
                 return
 
             # Check that coordinates are not the same as other fish
@@ -122,7 +120,6 @@ class SharkRunner:
                     "Uh oh! " + self.fish_names[i].capitalize()
                     + " fish's coord-\ninate is already taken.\n"
                     "Acceptable range is [0,9].")
-
                 return
 
         # Coordinates are locked in
@@ -132,7 +129,7 @@ class SharkRunner:
         self.all_coordinates[:3] = fish_coordinates
 
         # Add all fish coordinates to the fish object list fishes
-        for i in range(0,3):
+        for i in range(0, 3):
             self.fishes.append(Fish(i, fish_coordinates[i]))
             fish_coordinates[i][2] = self.fishes[i].getDirection()
 
@@ -147,8 +144,7 @@ class SharkRunner:
             moves each fish appropriately. Also updates fish recognition
             of going through a wall when in flee mode"""
 
-
-        # Create an list for fleemode
+        # Create a list for fleemode
         fleemode = []
 
         # Go through the fish coordinates list and append
@@ -204,7 +200,7 @@ class SharkRunner:
                         "Oh no! Yellow fish\nhas died. Click the\n"
                         "Move button to continue.", 1.5)
             if (self.all_coordinates[i][:2] == self.all_coordinates[3][:2]
-                or self.fishes[i].isDead()):
+                    or self.fishes[i].isDead()):
                 self.fishes[i].setDead(dead_fishes)
                 dead_fishes.append(True)
             else:
@@ -212,6 +208,7 @@ class SharkRunner:
 
         # Lets GUI keep track of dead fishes
         self.shark_GUI.setDead(dead_fishes)     
+
 
 # Call main with the SharkRunner class
 SharkRunner().main()
