@@ -159,6 +159,11 @@ class SharkRunner:
         self.shark_GUI.setFleeMode(fleemode)
         self.shark_GUI.setCoordinates(self.all_coordinates[:3])
 
+        # Prevents fish from occupying the same space
+        for i in range(2):
+            if self.fishes[i].getOriginalXY():
+                
+
         # Adjust fish coordinates when going through a wall
         for i in range(3):
             if self.fishes[i].insideWall():

@@ -60,6 +60,10 @@ class Fish:
                 self.position[1] -
                 round(math.sin(math.radians(self.position[2])))]
 
+##    def getOriginalXY(self) -> list:
+##        
+##        return self.position[:2]
+
     def getDirection(self) -> int:
         """Gets the direction z from the list x, y, z of fish."""
 
