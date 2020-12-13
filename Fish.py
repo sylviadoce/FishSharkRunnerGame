@@ -78,7 +78,7 @@ class Fish:
         """Determines if fish is inside the wall"""
 
         return (self.position[0] <= -1 or self.position[0] >= 10 or
-                self.position[1] <= -1 or self.position[1] >= 10):
+                self.position[1] <= -1 or self.position[1] >= 10)
 
     def sameNextPosition(self, position: list,
                          all_coordinates: list) -> bool:
