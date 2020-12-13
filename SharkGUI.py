@@ -278,11 +278,13 @@ class SharkGUI:
     def setDead(self, is_dead: list, delay=1.8):
         """Remove specified sprites from the canvas.
         Optional delay in seconds"""
+        print("processing dead fish", is_dead, delay)
         if delay:
-            self.win.after(int(delay * 1000), self.setDead, is_dead)
+            self.win.after(int(delay * 1000), self.setDead, is_dead, 0)
             return
         for i in range(len(is_dead)):
             if is_dead[i]:
+                print("fish", i, "died")
                 self.sprites[i].undraw()
                 self.images[i] = None
                 self.flee_images[i], self.regular_images[i] = None, None
@@ -290,7 +292,7 @@ class SharkGUI:
 
     def checkThroughMovement(self, i: int, next_pos: list,
                              current_position: list):
-        """Calculates through-wall posotion for fish with index i."""
+        """Calculates through-wall position for fish with index i."""
         moves = [[0, 0], [0, 0], [0, 0]]
         if next_pos[0] == -1:
             # Go through left wall
@@ -340,12 +342,14 @@ class SharkGUI:
         return 0
 
     def disableButtons(self):
-        """End of game method. Shows Try Again button and """
+        """End of game method. Shows Try Again button and
+         select quit button"""
         self.move_button.setLabel("Try Again")
         self.quit_button.activate().setSelectedOutline()
         self.message.setTextColor("#FFFFFF")
 
     def close(self):
+        """Close graphics window"""
         self.win.close()
 
 
