@@ -58,7 +58,7 @@ class SharkRunner:
                     message.append(self.fish_names[i])
             message[0] = message[0].capitalize()
             self.shark_GUI.displayMessage("Game Over!\n" + ", ".join(message) +
-                                          " fish(es) win.\nClick Quit or Try Again.", 2.5)
+                                          " fish(es) win (Shark goes hungry).\nClick Quit or Try Again.", 2.5)
 
         while True:
             # Takes care of quit by detecing mouse clicks
