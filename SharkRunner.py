@@ -100,7 +100,7 @@ class SharkRunner:
             if (not(fish_coordinates[i][0] in range(0,10) and fish_coordinates[i][1] in
                 range(0,10))):
                 self.shark_GUI.displayMessage("Uh oh! " + self.fish_names[i].capitalize() + " fish's coord-\ninate is not in range.\nAcceptable range is [0,9].")
-x
+
                 return
 
             # Check that coordinates are not the same as other fish
