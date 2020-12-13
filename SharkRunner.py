@@ -53,7 +53,7 @@ class SharkRunner:
         # Update the message with the proper winner
         if not self.checkFishAlive():
             self.shark_GUI.displayMessage("Game Over!\nShark wins.\n"
-                                          "Click Quit or Try Again.", 1.5)
+                                          "Click Quit or Try Again.", 2)
         else:
             for i in range(3):
                 # Check which specific fish are alive to congratulate
@@ -63,7 +63,7 @@ class SharkRunner:
             self.shark_GUI.displayMessage("Shark dies of hunger.\n"
                                           + ", ".join(message) +
                                           " fish(es) win!\n"
-                                          "Click Quit or Try Again.", 1.5)
+                                          "Click Quit or Try Again.", 2)
 
         while True:
             # Takes care of quit by detecing mouse clicks
@@ -194,15 +194,15 @@ class SharkRunner:
                 if i == 0:
                     self.shark_GUI.displayMessage(
                         "Oh no! Orange fish\n has died. Click the\n"
-                        "Move button to continue.", 1.8)
+                        "Move button to continue.", 1.5)
                 elif i == 1:
                     self.shark_GUI.displayMessage(
                         "Oh no! Purple fish\n has died. Click the\n"
-                        "Move button to continue.", 1.8)
+                        "Move button to continue.", 1.5)
                 elif i == 2:
                     self.shark_GUI.displayMessage(
                         "Oh no! Yellow fish\nhas died. Click the\n"
-                        "Move button to continue.", 1.8)
+                        "Move button to continue.", 1.5)
             if (self.all_coordinates[i][:2] == self.all_coordinates[3][:2]
                 or self.fishes[i].isDead()):
                 self.fishes[i].setDead(dead_fishes)
