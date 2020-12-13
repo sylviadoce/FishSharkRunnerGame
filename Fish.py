@@ -81,9 +81,10 @@ class Fish:
         else:
             return False
 
-    def sameNextPosition(self, position: list, all_coordinates: list) -> bool:
-        """Returns True if two fish are moving to the same position, starting
-            with the first fish"""
+    def sameNextPosition(self, position: list,
+                         all_coordinates: list) -> bool:
+        """Returns True if two fish are moving to the same position,
+            starting with the first fish"""
 
         if self.fish_id == 0:
             return False
@@ -120,7 +121,8 @@ class Fish:
                 (abs(shark_pos[1] - self.position[1]) <= 3))
 
     def getFleeModeNextPosition(self, all_coordinates: list) -> list:
-        "Determines fish's next position based on shark's angle in flee mode"
+        """Determines fish's next position based on shark's angle in
+        flee mode"""
 
         # Finds directional angle btwn fish/shark, convert to
             # degrees, [0,360) interval
@@ -153,12 +155,12 @@ class Fish:
             # Divide by 90, round to nearest int, multiply by 90
             self.position[2] = (round(shark_direction/90) * 90) % 360
 
-        # Check if next position is facing wall, if so go through wall 
+        # Check if next position is facing wall, if so go through wall
         check_position = self.getXY()
         if self.facingWall():
             check_position = self.getThroughWallPosition()
 
-        # Check if next position (other option) is taken, if so don't move 
+        # Check if next position (other option) is taken, if so don't move
         if self.sameNextPosition(check_position, all_coordinates):
             return self.position
         else:
