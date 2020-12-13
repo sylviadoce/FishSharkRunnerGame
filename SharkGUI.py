@@ -278,14 +278,14 @@ class SharkGUI:
     def setDead(self, is_dead: list, delay=1.8):
         """Remove specified sprites from the canvas.
         Optional delay in seconds"""
-        print("processing dead fish", is_dead, delay)
         if delay:
             self.win.after(int(delay * 1000), self.setDead, is_dead, 0)
             return
         for i in range(len(is_dead)):
             if is_dead[i]:
-                print("fish", i, "died")
                 self.sprites[i].undraw()
+                self.sprites[i].img = PIL.ImageTk.PhotoImage(
+                    PIL.Image.new('RGBA', (10, 10), (255, 0, 0, 0)))
                 self.images[i] = None
                 self.flee_images[i], self.regular_images[i] = None, None
                 self.spriteMoveTo(i, [-10, -10])
