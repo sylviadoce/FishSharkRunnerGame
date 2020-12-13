@@ -110,8 +110,6 @@ class Fish:
 ##        """Returns True if two fishes are about to swap positions."""
 ##
 ##        if self.fish_id == 0:
-##            og_positions = [[self.position[:2]], [all_coordinates[0][:2]],
-##                            [all_coordinates[1][:2]]]
 ##            return (self.position[:2] == all_coordinates[0][:2] and
 ##                    position[:2] == #og position of other fish
 ##                    or self.position[:2] == all_coordinates[1][:2] and
