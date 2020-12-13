@@ -84,7 +84,6 @@ class SharkRunner:
 
         # Go through each coordinate in the list of coordinates
         for i in range(2,-1,-1):
-            print(fish_coordinates)
             # Check that the length of each fish list is 2
             if len(fish_coordinates[i]) != 2:
                 self.shark_GUI.displayMessage("Uh oh! " + self.fish_names[i].capitalize() + " fish's coord-\ninates should be 2 numbers\nseparated by a comma.")
@@ -101,7 +100,7 @@ class SharkRunner:
             if (not(fish_coordinates[i][0] in range(0,10) and fish_coordinates[i][1] in
                 range(0,10))):
                 self.shark_GUI.displayMessage("Uh oh! " + self.fish_names[i].capitalize() + " fish's coord-\ninate is not in range.\nAcceptable range is [0,9].")
-
+x
                 return
 
             # Check that coordinates are not the same as other fish
@@ -183,8 +182,6 @@ class SharkRunner:
                 dead_fishes.append(True)
             else:
                 dead_fishes.append(False)
-
-        print("Dead fishes:", dead_fishes)
 
         # Lets GUI keep track of dead fishes
         self.shark_GUI.setDead(dead_fishes)     

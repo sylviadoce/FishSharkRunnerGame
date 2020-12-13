@@ -23,8 +23,6 @@ class Fish:
             if it's in flee mode, if it's facing a wall, and if it's on
             another's location"""
 
-        print("NEXT FISH POSITION")
-
         # Pop fish_id from the all_coordinates list
         all_coordinates.pop(self.fish_id)
 
@@ -50,10 +48,6 @@ class Fish:
 
     def getXY(self) -> list:
         "Gets fish's next move along the x or y-axis"
-
-        print("in getXY, OG fish direction:", self.position[2])
-        print("in getXY, OG positions:", self.position[0], self.position[1])
-        print("in getXY, OG direction:", self.position[2])
 
         # Use trig on the fish's direction to determine movement
             # Because of python coordinate system, subtract y movement
@@ -90,9 +84,6 @@ class Fish:
     def sameNextPosition(self, position: list, all_coordinates: list) -> bool:
         """Returns True if two fish are moving to the same position, starting
             with the first fish"""
-
-        print("in sameNextPos, position:", position)
-        print("in sameNextPos, all coordinates:", all_coordinates)
 
         if self.fish_id == 0:
             return False
@@ -136,8 +127,6 @@ class Fish:
         shark_direction = math.degrees(
             -math.atan2((self.position[1] - all_coordinates[2][1]),
                         (self.position[0] - all_coordinates[2][0]))) % 360
-
-        print("in getFleeModeNextPos, shark angle to fish:", shark_direction)
         
         # Checks if angle is 0, 90, 180, 270 (straight)
         if shark_direction % 90 == 0:
