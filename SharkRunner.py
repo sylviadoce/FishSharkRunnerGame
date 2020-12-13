@@ -12,7 +12,7 @@ class SharkRunner:
     def __init__(self):
         """Initializes variables associated with SharkGUI and Shark
             Class, a list of fish objects, and a list of lists for
-            all coordinates"""  
+            all coordinates."""  
         
         # Creates the shark graphics window
         self.shark_GUI = SharkGUI()
@@ -74,7 +74,7 @@ class SharkRunner:
                 SharkRunner().main()
 
     def checkFishAlive(self):
-        """Returns True if any fish status is alive"""
+        """Returns True if any fish status is alive."""
         if self.fishes:
             return not(self.fishes[0].isDead() and self.fishes[1].isDead()
                        and self.fishes[2].isDead())
@@ -83,7 +83,7 @@ class SharkRunner:
     def start(self):
         """Sets up round by checking for valid coordinates, displaying
             fishes and shark on board, and deactivating/activating the
-            Start and Move buttons"""
+            Start and Move buttons."""
 
         # Gets the inputted fish coordinates from the GUI entry box
         fish_coordinates = self.shark_GUI.getCoordinates()
@@ -102,7 +102,7 @@ class SharkRunner:
             if fish_coordinates[i] == [7, 2]:
                 self.shark_GUI.displayMessage(
                     "Uh oh! " + self.fish_names[i].capitalize()
-                    + " fish's coord-\ninate is on top of shark")
+                    + " fish's coord-\ninate is on top of shark.")
                 return
 
             # Check coordinates are within the range (0,10)
@@ -142,7 +142,7 @@ class SharkRunner:
     def moveFish(self):
         """Keeps track of fishes' positions and flee mode status, then
             moves each fish appropriately. Also updates fish recognition
-            of going through a wall when in flee mode"""
+            of going through a wall when in flee mode."""
 
         # Create a list for fleemode
         fleemode = []
