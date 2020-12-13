@@ -264,7 +264,6 @@ class SharkGUI:
         """Set flee mode images of all fish. Optional delay in seconds."""
         if delay:  # Schedule callback and return
             self.win.after(int(delay*1000), self.setFleeMode, in_flee_mode)
-            print("callback on setFleeMode", delay, in_flee_mode)
             return
         for i in range(len(in_flee_mode)):
             if self.images[i]:

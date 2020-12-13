@@ -37,8 +37,6 @@ class Shark:
         # Create list of distances to each fish
         for pos in fish_pos:
             distances.append(math.dist(pos[:2], self.position[:2]))
-        print("fish distances", distances, sorted(distances),
-              min(distances), distances.index(min(distances)))
         # Check if 2 or 3 fish have equal distances
         if ((sorted(distances)[0] == sorted(distances)[1] and
              0 <= sorted(distances).index(
