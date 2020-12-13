@@ -63,7 +63,7 @@ class SharkRunner:
             message[0] = message[0].capitalize()
             self.shark_GUI.displayMessage("Shark dies of hunger.\n"
                                           + ", ".join(message) +
-                                          " fish(es) win!\n"
+                                          " fish win!\n"
                                           "Click Quit or Try Again.", 2)
 
         while True:
