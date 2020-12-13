@@ -285,10 +285,12 @@ class SharkGUI:
             if is_dead[i]:
                 self.sprites[i].undraw()
                 self.images[i] = None
+                self.flee_images[i], self.regular_images[i] = None, None
                 self.spriteMoveTo(i, [-10, -10])
 
     def checkThroughMovement(self, i: int, next_pos: list,
                              current_position: list):
+        """Calculates through-wall posotion for fish with index i."""
         moves = [[0, 0], [0, 0], [0, 0]]
         if next_pos[0] == -1:
             # Go through left wall
@@ -306,8 +308,11 @@ class SharkGUI:
             # Go through bottom wall
             moves = [[next_pos[0], 11],
                      [next_pos[0], -2], [next_pos[0], 0]]
+        # check if any fish go through walls
         if moves != [[0, 0], [0, 0], [0, 0]]:
             next_pos[:2] = moves[0]
+            # Schedule jump to other side of canvas and then
+            # animation to new position
             self.win.after(2000, self.spriteMoveTo, i,
                            self.gridToCanvas(moves[1]))
             self.win.after(2100, self.spriteMoveOverTime, i, 1,
@@ -316,28 +321,26 @@ class SharkGUI:
         return next_pos, current_position
 
     def handleMouse(self):
+        """Handle clicks and returns which button was pressed"""
         point = self.win.getMouse()
         if self.quit_button.clicked(point):
             quit("Quit Button Pressed")
         if self.start_button.clicked(point):
-            print("start")
             return 1
-        if self.move_button.clicked(point):  # and self.animationComplete()
+        if self.move_button.clicked(point):
+            # Switch button text between shark and fish
             if self.is_shark_move:
                 self.is_shark_move = False
                 self.move_button.setLabel("Move Fish")
-                print("move fish")
                 return 3
             else:
                 self.is_shark_move = True
                 self.move_button.setLabel("Move Shark")
-                print("move shark")
                 return 2
-        print("animationComplete", self.animationComplete(),
-              self.animation_status)
         return 0
 
     def disableButtons(self):
+        """End of game method. Shows Try Again button and """
         self.move_button.setLabel("Try Again")
         self.quit_button.activate().setSelectedOutline()
         self.message.setTextColor("#FFFFFF")
