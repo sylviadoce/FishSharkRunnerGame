@@ -8,17 +8,19 @@ from random import sample
 class Shark:
 
     def __init__(self):
+        """Create new shark at [7,2]"""
         self.position = [7, 2, 0]
         self.max_distance = 2.49  # Max direct distance
         self.following_fish = -1
         self.previous_moves = [[], []]
 
     def getStalemate(self):
+        """Return whether shark will be forever hungry"""
+        # Return False for the first 8 moves.
+        # No stalemate can occur before then
         if len(self.previous_moves[0]) >= 8:  # 8 moves have transpired
-            print("shark x count", self.previous_moves[0].count(
-                self.previous_moves[0][0]))
-            print("shark y count", self.previous_moves[1].count(
-                self.previous_moves[1][0]))
+            # Count x and y coordinates which are the same as
+            # the first in the list
             return (self.previous_moves[0].count(
                 self.previous_moves[0][0]) == len(self.previous_moves[0])
                     or self.previous_moves[1].count(
@@ -26,15 +28,18 @@ class Shark:
         return False
 
     def getPosition(self):
+        """Returns current position in [x,y]"""
         return self.position[:2]
 
     def getNextPosition(self, fish_pos: list) -> list:
+        """Calculate and return next shark position"""
         distances = []
+        # Create list of distances to each fish
         for pos in fish_pos:
             distances.append(math.dist(pos[:2], self.position[:2]))
         print("fish distances", distances, sorted(distances),
               min(distances), distances.index(min(distances)))
-
+        # Check if 2 or 3 fish have equal distances
         if ((sorted(distances)[0] == sorted(distances)[1] and
              0 <= sorted(distances).index(
                     distances[self.following_fish]) <= 1) or
@@ -42,14 +47,13 @@ class Shark:
                 == sorted(distances)[2])
                 and self.following_fish > 0):
             closest_fish = fish_pos[self.following_fish]
-            print("shark continue following fish", self.following_fish)
         else:
+            # Choose one of the equally-distanced fish at random
             self.following_fish = distances.index(
                 min(sample(distances, 3)))
             closest_fish = fish_pos[self.following_fish]
-            print("shark switch following fish", self.following_fish)
         fish_distance = math.dist(closest_fish[:2], self.position[:2])
-        if fish_distance > 0.4:
+        if fish_distance > 0.4:  # Check if shark is not on fish
             delta_position = [
                 round(min(self.max_distance, fish_distance) * (
                     (closest_fish[0] - self.position[0]) / fish_distance)),
@@ -57,7 +61,7 @@ class Shark:
                     (closest_fish[1] - self.position[1]) / fish_distance))]
             off_axis = [closest_fish[0] - self.position[0],
                         closest_fish[1] - self.position[1]]
-            print("shark pre off axis", delta_position, off_axis)
+            # Prefer moving diagonally if shark if not on-axis with a fish
             if ((abs(delta_position[0]) == 0 or
                  abs(delta_position[1] == 0))
                     and (off_axis[0] != 0 and off_axis[1] != 0)):
@@ -67,21 +71,11 @@ class Shark:
                     delta_position[1] += math.copysign(1, off_axis[1])
             self.position = [self.position[0] + delta_position[0],
                              self.position[1] + delta_position[1]]
-            print("shark post off axis", delta_position, self.position)
-
-        print("shark going to", self.following_fish, "dist", fish_distance)
-
+        # save current move to previous_moves for stalemate detection
         self.previous_moves[0].append(self.position[:2][0])
         self.previous_moves[1].append(self.position[:2][1])
+        # Clean previous_moves list if longer than 8
         if len(self.previous_moves[0]) > 8:  # 8 moves have transpired
             self.previous_moves[0].pop(0)
             self.previous_moves[1].pop(0)
-        print("shark previous moves", self.previous_moves)
         return self.position
-
-
-if __name__ == "__main__":
-    shark = Shark()
-    print(shark.position)
-    print(shark.getNextPosition([[1, 1], [1, 2], [1, 3]]))
-    print(shark.getNextPosition([[2, 1], [2, 2], [2, 3]]))
