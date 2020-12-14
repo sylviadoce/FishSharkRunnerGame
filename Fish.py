@@ -34,9 +34,6 @@ class Fish:
         if self.getFleeMode(all_coordinates[2]):
             # Special get next position method
             return self.getFleeModeNextPosition(all_coordinates)
-##        # Prevents fish from swapping places (overlapping)
-##        if self.facingEachOther(self.getXY(), all_coordinates):
-##            return self.position
         # Turn the fish around if facing a wall
         if self.facingWall():
             self.position[2] += 180
@@ -59,10 +56,6 @@ class Fish:
                 round(math.cos(math.radians(self.position[2]))),
                 self.position[1] -
                 round(math.sin(math.radians(self.position[2])))]
-
-##    def getOriginalXY(self) -> list:
-##        
-##        return self.position[:2]
 
     def getDirection(self) -> int:
         """Gets the direction z from the list x, y, z of fish."""
