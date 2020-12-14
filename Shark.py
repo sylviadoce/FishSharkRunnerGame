@@ -1,5 +1,6 @@
-# Shark class
 # Benjamin Antupit
+
+# Shark class: Gets shark position and keeps track of stalemates
 
 import math
 from random import sample

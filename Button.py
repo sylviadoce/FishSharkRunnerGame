@@ -1,5 +1,6 @@
-# Button class: Displays a customizable and toggle-able button
 # Benjamin Antupit
+
+# Button class: Displays a customizable and toggle-able button
 
 from graphics import Rectangle, Point, Text
 

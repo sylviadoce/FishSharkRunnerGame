@@ -1,5 +1,7 @@
-# Shark Game GUI Handler (Benjamin Antupit)
-# Background Water texture found at
+# Benjamin Antupit
+
+# Shark Game GUI Handler
+# Background water texture found at
 # https://2minutetabletop.com/product/ocean-water-textures/
 # All other graphics were created by Benjamin & Sylvia
 
