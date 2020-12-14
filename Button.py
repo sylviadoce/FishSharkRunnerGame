@@ -1,6 +1,6 @@
 # Benjamin Antupit
 
-# Button class: Displays a customizable and toggle-able button
+# Button class: Displays a customizable button
 
 from graphics import Rectangle, Point, Text
 
@@ -106,13 +106,6 @@ class Button:
         """Set outline thickness"""
         self.rect.setWidth(width)
         return self
-
-    def alignLeft(self):
-        """Align label text to the left.
-           Anchor point will also be on left"""
-        self.label.config["justify"] = "left"
-        self.label.config["anchor"] = "w"
-        self.label.canvas.itemconfig(self.label.id, self.label.config)
 
     def undraw(self):
         """Hide button"""
