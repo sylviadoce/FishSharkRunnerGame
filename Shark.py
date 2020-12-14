@@ -18,7 +18,7 @@ class Shark:
         """Return whether shark will be forever hungry"""
         # Return False for the first 8 moves.
         # No stalemate can occur before then
-        if len(self.previous_moves[0]) >= 8:  # 8 moves have transpired
+        if len(self.previous_moves[0]) >= 12:  # 12 moves have transpired
             # Count x and y coordinates which are the same as
             # the first in the list
             return (self.previous_moves[0].count(
@@ -73,7 +73,7 @@ class Shark:
         self.previous_moves[0].append(self.position[:2][0])
         self.previous_moves[1].append(self.position[:2][1])
         # Clean previous_moves list if longer than 8
-        if len(self.previous_moves[0]) > 8:  # 8 moves have transpired
+        if len(self.previous_moves[0]) > 12:  # 12 moves have transpired
             self.previous_moves[0].pop(0)
             self.previous_moves[1].pop(0)
         return self.position
