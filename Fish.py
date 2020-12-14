@@ -92,40 +92,8 @@ class Fish:
         """Returns True if two fish are moving to the same position,
             starting with the first fish."""
 
-##        print("og POSITION LIST:", position)
-##        print("og ALL COORDS LIST:", all_coordinates)
-##        print("og SELF.POS LIST:", self.position)
-##
-##        og_positions = [[self.position[:2]], [all_coordinates[0][:2]],
-##                        [all_coordinates[1][:2]]]
-##
-##        print("init og poses:", og_positions)
-
-        if self.fish_id == 0:
-            return False
-        elif self.fish_id == 1:
-            return (position[:2] == all_coordinates[0][:2])
-        elif self.fish_id == 2:
-            return (position[:2] == all_coordinates[1][:2] or
-                    position[:2] == all_coordinates[0][:2])
-
-##    def facingEachOther(self, position: list,
-##                        all_coordinates: list) -> bool:
-##        """Returns True if two fishes are about to swap positions."""
-##
-##        if self.fish_id == 0:
-##            return (self.position[:2] == all_coordinates[0][:2] and
-##                    position[:2] == #og position of other fish
-##                    or self.position[:2] == all_coordinates[1][:2] and
-##                    position[:2] == #og position of other fish
-##        elif self.fish_id == 1:
-##            return (self.position[:2] == all_coordinates[0][:2] and
-##                    position[:2] == #og position of other fish
-##                    or self.position[:2] == all_coordinates[1][:2] and
-##                    position[:2] == #og position of other fish
-##        elif self.fish_id == 2:
-##            return (position[:2] == self.position[:2] or
-##                    position[:2] == self.position[:2])
+        return (position[:2] == all_coordinates[1][:2] or
+                position[:2] == all_coordinates[0][:2])
 
     def getThroughWallPosition(self) -> list:
         """Detecting in flee mode that fish goes through the wall,
