@@ -1,6 +1,7 @@
 # Sylvia Chin
 #
-# Shark Runner
+# Shark Runner class compiles other three classes to organize movement and
+# progress the game
 
 from Fish import Fish
 from Shark import Shark
