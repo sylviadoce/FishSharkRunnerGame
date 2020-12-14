@@ -17,7 +17,7 @@ class Shark:
 
     def getStalemate(self):
         """Return whether shark will be forever hungry"""
-        # Return False for the first 8 moves.
+        # Return False for the first 12 moves.
         # No stalemate can occur before then
         if len(self.previous_moves[0]) >= 12:  # 12 moves have transpired
             # Count x and y coordinates which are the same as
@@ -73,7 +73,7 @@ class Shark:
         # save current move to previous_moves for stalemate detection
         self.previous_moves[0].append(self.position[:2][0])
         self.previous_moves[1].append(self.position[:2][1])
-        # Clean previous_moves list if longer than 8
+        # Clean previous_moves list if longer than 12
         if len(self.previous_moves[0]) > 12:  # 12 moves have transpired
             self.previous_moves[0].pop(0)
             self.previous_moves[1].pop(0)
